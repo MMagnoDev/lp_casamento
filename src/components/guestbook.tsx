@@ -53,9 +53,9 @@ export default function Guestbook() {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
       {/* Form Area */}
-      <div className="lg:col-span-2 bg-transparent border border-border/80 p-6 rounded-[3rem] h-fit">
+      <div className="lg:col-span-1 lg:order-2 bg-[#FAF6F3] border border-border/80 p-6 rounded-[3rem] h-fit shadow-sm">
         <h4 className="font-serif text-base font-light text-foreground mb-4 flex items-center gap-2">
           <Heart size={18} className="text-primary" weight="fill" />
           <span>Escreva seus votos</span>
@@ -95,7 +95,7 @@ export default function Guestbook() {
           </div>
 
           <motion.button
-            whileHover={{ scale: 1.01 }}
+            whileHover={{ scale: 1.03, y: -1 }}
             whileTap={{ scale: 0.99 }}
             type="submit"
             disabled={loading}
@@ -114,7 +114,7 @@ export default function Guestbook() {
       </div>
 
       {/* Messages List */}
-      <div className="lg:col-span-3 space-y-4 max-h-[360px] overflow-y-auto pr-2">
+      <div className="lg:col-span-2 lg:order-1 space-y-4 max-h-[360px] overflow-y-auto pr-2">
         <AnimatePresence initial={false}>
           {messages.map((msg) => (
             <motion.div
@@ -123,7 +123,7 @@ export default function Guestbook() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5 }}
-              className="bg-transparent border border-border/60 p-5 rounded-[3rem] space-y-3 relative"
+              className="bg-[#FAF6F3] border border-border/60 p-5 rounded-[3rem] space-y-3 relative shadow-sm"
             >
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2.5">

@@ -13,13 +13,20 @@ const playfair = Playfair_Display({
 const montserrat = Montserrat({
   subsets: ["latin"],
   variable: "--font-sans",
-  weight: ["300", "400", "500", "600"],
+  weight: ["100", "200", "300", "400", "500", "600"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
   title: "Isadora & Wander | Nosso Casamento",
   description: "Site de casamento de Isadora e Wander. Confirme sua presença e confira as dicas e lista de presentes.",
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export default function RootLayout({
@@ -30,9 +37,9 @@ export default function RootLayout({
   return (
     <html
       lang="pt-BR"
-      className={`${playfair.variable} ${montserrat.variable} h-full antialiased`}
+      className={`${playfair.variable} ${montserrat.variable} antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#FAF6F3] text-[#3C2D24]">
+      <body className="bg-[#FAF6F3] text-[#3C2D24]">
         <LenisProvider>
           {children}
         </LenisProvider>

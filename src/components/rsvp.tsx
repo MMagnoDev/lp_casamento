@@ -35,7 +35,7 @@ export default function Rsvp() {
   };
 
   return (
-    <div className="max-w-lg mx-auto bg-transparent p-6 md:p-8 rounded-[3rem] border border-border/80">
+    <div className="w-full bg-[#F5EFEB] p-6 md:p-8 rounded-[3rem] border border-border/80 shadow-sm">
       <AnimatePresence mode="wait">
         {!submitted ? (
           <motion.form
@@ -130,7 +130,7 @@ export default function Rsvp() {
             </div>
 
             <motion.button
-              whileHover={{ scale: 1.01 }}
+              whileHover={{ scale: 1.03, y: -1 }}
               whileTap={{ scale: 0.99 }}
               type="submit"
               disabled={loading || !status}

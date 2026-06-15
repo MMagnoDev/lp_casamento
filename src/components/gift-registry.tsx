@@ -2,7 +2,10 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Gift, Copy, Check, X, CaretLeft, CaretRight } from "@phosphor-icons/react";
+import { Gift, Copy, Check, X, CaretLeft, CaretRight, WhatsappLogo } from "@phosphor-icons/react";
+
+const WHATSAPP_PHONE = "5511999999999"; // Substitua pelo número de telefone do casal (com DDI + DDD, apenas números)
+
 
 interface GiftItem {
   id: number;
@@ -281,15 +284,28 @@ export default function GiftRegistry() {
                     </div>
                   </div>
 
-                  <button
-                    onClick={() => {
-                      setSelectedGift(null);
-                      setShowPixDetails(false);
-                    }}
-                    className="w-full bg-primary hover:bg-primary-hover text-white py-2.5 rounded-full text-[10px] uppercase tracking-wider transition font-semibold"
-                  >
-                    Fechar
-                  </button>
+                  <div className="flex flex-col gap-2 pt-2">
+                    <a
+                      href={`https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(
+                        `Olá! Realizei o PIX para o presente "${selectedGift.name}" no valor de R$ ${selectedGift.price.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}. Segue o comprovante em anexo!`
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full bg-[#25D366] hover:bg-[#20BA56] text-white py-2.5 rounded-full text-[10px] uppercase tracking-wider transition font-semibold flex items-center justify-center gap-2 shadow-sm"
+                    >
+                      <WhatsappLogo size={14} weight="fill" />
+                      <span>Enviar Comprovante</span>
+                    </a>
+                    <button
+                      onClick={() => {
+                        setSelectedGift(null);
+                        setShowPixDetails(false);
+                      }}
+                      className="w-full border border-border hover:bg-card/40 text-primary py-2.5 rounded-full text-[10px] uppercase tracking-wider transition font-semibold"
+                    >
+                      Fechar
+                    </button>
+                  </div>
                 </div>
               )}
             </motion.div>
