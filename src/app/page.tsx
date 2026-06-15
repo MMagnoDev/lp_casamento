@@ -61,7 +61,7 @@ export default function Home() {
             href="#rsvp"
             className="bg-[#8F6E56] hover:bg-[#7A5C46] text-white px-5 py-2 rounded-full text-[10px] font-semibold uppercase tracking-[0.2em] transition shadow-sm inline-block"
           >
-            Confirmar RSVP
+            Confirmar Presença
           </motion.a>
         </div>
       </header>
@@ -69,7 +69,7 @@ export default function Home() {
       {/* 1. Capa inicial (Hero Section matching the image exactly, with cutoff fix) */}
       <section className="relative h-[100dvh] min-h-[600px] flex flex-col justify-between overflow-hidden bg-cover bg-center pt-24 pb-6" style={{ backgroundImage: "url('/img/hero-bg.png')" }}>
         <div className="absolute inset-0 bg-[#FAF6F3]/10 z-0" />
-        
+
         {/* Spacer */}
         <div className="h-6" />
 
@@ -179,7 +179,7 @@ export default function Home() {
                 <h2 className="font-sans text-5xl md:text-7xl lg:text-8xl text-[#3C2D24] font-extralight tracking-wide leading-[0.95]">
                   O Nosso <br /> Casamento
                 </h2>
-                
+
                 {/* Swirl Infinity Divider Line */}
                 <div className="flex justify-center lg:justify-start items-center py-2 text-[#DCD0C0]">
                   <svg className="w-28 h-3" viewBox="0 0 120 10" fill="none" stroke="currentColor" strokeWidth="1">
@@ -209,7 +209,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-          
+
           {/* Right side: 1/3 width for the couple image, hidden on mobile */}
           <div className="hidden lg:flex w-full lg:w-1/3 items-center justify-center">
             <div className="w-full h-full min-h-[350px] lg:min-h-[500px]">
@@ -238,7 +238,7 @@ export default function Home() {
                   Lista de <br /> Casamento
                 </h2>
               </div>
-              
+
               {/* Swirl Infinity Divider Line */}
               <div className="flex justify-center lg:justify-end items-center py-1 text-[#DCD0C0] w-full">
                 <svg className="w-28 h-3" viewBox="0 0 120 10" fill="none" stroke="currentColor" strokeWidth="1">
@@ -277,7 +277,7 @@ export default function Home() {
               <h2 className="font-sans text-5xl md:text-7xl lg:text-8xl text-foreground font-extralight tracking-wide leading-[0.95]">
                 Informações <br /> Gerais
               </h2>
-              
+
               {/* Swirl Infinity Divider Line */}
               <div className="flex justify-center lg:justify-start items-center py-2 text-[#DCD0C0]">
                 <svg className="w-28 h-3" viewBox="0 0 120 10" fill="none" stroke="currentColor" strokeWidth="1">
@@ -286,7 +286,7 @@ export default function Home() {
                 </svg>
               </div>
             </div>
-            
+
             <div className="space-y-5 pt-4">
               <div className="flex gap-4 items-start">
                 <div className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-primary shrink-0">
@@ -360,7 +360,7 @@ export default function Home() {
                 <h2 className="font-sans text-5xl md:text-7xl lg:text-8xl text-foreground font-extralight tracking-wide leading-[0.95] lowercase first-letter:uppercase">
                   Como <br /> Chegar
                 </h2>
-                
+
                 {/* Swirl Infinity Divider Line */}
                 <div className="flex justify-center lg:justify-end items-center py-2 text-[#DCD0C0]">
                   <svg className="w-28 h-3" viewBox="0 0 120 10" fill="none" stroke="currentColor" strokeWidth="1">
@@ -466,7 +466,7 @@ export default function Home() {
               <h2 className="font-sans text-5xl md:text-7xl lg:text-8xl text-foreground font-extralight tracking-wide leading-[0.95]">
                 Manual dos <br /> Padrinhos
               </h2>
-              
+
               {/* Swirl Infinity Divider Line */}
               <div className="flex justify-center lg:justify-end items-center py-2 text-[#DCD0C0] w-full">
                 <svg className="w-28 h-3" viewBox="0 0 120 10" fill="none" stroke="currentColor" strokeWidth="1">
@@ -475,7 +475,7 @@ export default function Home() {
                 </svg>
               </div>
             </div>
-            
+
             <p className="text-[#8F6E56] text-xs leading-relaxed font-sans font-light text-center lg:text-right">
               Orientações importantes sobre trajes e horários para os nossos padrinhos e madrinhas.
             </p>
@@ -501,7 +501,7 @@ export default function Home() {
               <h2 className="font-sans text-5xl md:text-7xl lg:text-8xl text-foreground font-extralight tracking-wide leading-[0.95]">
                 Confirmar <br /> Presença
               </h2>
-              
+
               {/* Swirl Infinity Divider Line */}
               <div className="flex justify-center lg:justify-start items-center py-2 text-[#DCD0C0]">
                 <svg className="w-28 h-3" viewBox="0 0 120 10" fill="none" stroke="currentColor" strokeWidth="1">
@@ -510,7 +510,7 @@ export default function Home() {
                 </svg>
               </div>
             </div>
-            
+
             <p className="text-[#8F6E56] text-xs leading-relaxed font-sans font-light text-center lg:text-left">
               Por favor, confirme sua presença até o dia 15/01/2027 para nos ajudar na organização.
             </p>
@@ -551,7 +551,7 @@ export default function Home() {
           Dúvidas? Fale Conosco
         </span>
         <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.457L0 24zm6.59-4.846c1.6.95 3.488 1.452 5.421 1.453 5.9 0 10.7-4.8 10.702-10.7.002-2.857-1.107-5.54-3.125-7.56C17.58 2.327 14.9 1.216 12.01 1.216 6.11 1.216 1.314 6.015 1.31 11.917c-.001 1.998.523 3.951 1.517 5.674l-.99 3.613 3.702-.97.108.064zM18.06 14.85c-.332-.165-1.962-.97-2.267-1.08-.305-.11-.527-.165-.75.165-.22.33-.853 1.08-1.043 1.297-.19.215-.383.242-.715.077-.33-.165-1.393-.513-2.656-1.64-1-.89-1.674-1.99-1.872-2.33-.197-.33-.02-.508.145-.67.15-.148.33-.387.496-.58.165-.195.22-.33.33-.55.11-.22.05-.413-.025-.58-.077-.164-.75-1.807-1.026-2.478-.27-.647-.54-.56-.75-.57-.193-.01-.413-.012-.633-.012-.22 0-.58.08-.88.41-.3.33-1.16 1.13-1.16 2.76 0 1.63 1.19 3.2 1.35 3.42.16.22 2.337 3.57 5.66 5.01.79.34 1.41.54 1.89.7.794.25 1.52.21 2.09.13.64-.1 1.96-.8 2.24-1.57.28-.77.28-1.43.2-1.57-.08-.14-.3-.22-.63-.385z"/>
+          <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.457L0 24zm6.59-4.846c1.6.95 3.488 1.452 5.421 1.453 5.9 0 10.7-4.8 10.702-10.7.002-2.857-1.107-5.54-3.125-7.56C17.58 2.327 14.9 1.216 12.01 1.216 6.11 1.216 1.314 6.015 1.31 11.917c-.001 1.998.523 3.951 1.517 5.674l-.99 3.613 3.702-.97.108.064zM18.06 14.85c-.332-.165-1.962-.97-2.267-1.08-.305-.11-.527-.165-.75.165-.22.33-.853 1.08-1.043 1.297-.19.215-.383.242-.715.077-.33-.165-1.393-.513-2.656-1.64-1-.89-1.674-1.99-1.872-2.33-.197-.33-.02-.508.145-.67.15-.148.33-.387.496-.58.165-.195.22-.33.33-.55.11-.22.05-.413-.025-.58-.077-.164-.75-1.807-1.026-2.478-.27-.647-.54-.56-.75-.57-.193-.01-.413-.012-.633-.012-.22 0-.58.08-.88.41-.3.33-1.16 1.13-1.16 2.76 0 1.63 1.19 3.2 1.35 3.42.16.22 2.337 3.57 5.66 5.01.79.34 1.41.54 1.89.7.794.25 1.52.21 2.09.13.64-.1 1.96-.8 2.24-1.57.28-.77.28-1.43.2-1.57-.08-.14-.3-.22-.63-.385z" />
         </svg>
       </motion.a>
     </div>
