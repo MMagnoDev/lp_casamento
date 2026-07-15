@@ -74,12 +74,12 @@ export default function Countdown() {
             transition={{ duration: 0.8, delay: index * 0.15 }}
             className="flex flex-col items-center"
           >
-            <div className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full border border-border flex items-center justify-center bg-transparent">
-              <span className="font-serif text-sm sm:text-lg md:text-xl font-light text-primary">
+            <div className="w-14 h-14 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full border border-border/60 flex items-center justify-center bg-[#FAF6F3]/50 shadow-[inset_0_1px_2px_rgba(60,45,36,0.02)] transition-all duration-500 hover:border-primary/50 hover:bg-[#FAF6F3]">
+              <span className="font-serif text-lg sm:text-2xl md:text-3xl font-light text-primary tracking-normal">
                 {String(item.value).padStart(2, "0")}
               </span>
             </div>
-            <span className="text-[7px] sm:text-[9px] uppercase tracking-[0.15em] sm:tracking-[0.2em] text-accent mt-2 sm:mt-3 font-sans font-medium">
+            <span className="text-[8px] sm:text-[9px] uppercase tracking-[0.25em] text-espresso/70 mt-2 sm:mt-3 font-sans font-medium">
               {item.label}
             </span>
           </motion.div>

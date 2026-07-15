@@ -1,24 +1,24 @@
 "use client";
 
-import React from "react";
-import { motion } from "motion/react";
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import Countdown from "@/components/countdown";
 import GiftRegistry from "@/components/gift-registry";
 import GodparentsManual from "@/components/godparents-manual";
 import Rsvp from "@/components/rsvp";
-import { Calendar, MapPin, Sparkle, Bed, Car, Train, DeviceMobile } from "@phosphor-icons/react";
+import { Calendar, MapPin, Sparkle, Bed, Car, Train, DeviceMobile, List, X } from "@phosphor-icons/react";
 
-// Fade Animation Helper Component with 100vh height enforcement
+// Fade Animation Helper Component
 function FadeInSection({ children, id, className = "", style = {} }: { children: React.ReactNode; id?: string; className?: string; style?: React.CSSProperties }) {
   return (
     <motion.section
       id={id}
-      initial={{ opacity: 0, y: 50 }}
+      initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.1 }}
-      transition={{ duration: 1.2, ease: [0.215, 0.61, 0.355, 1] }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
       style={style}
-      className={`min-h-[100dvh] flex flex-col justify-center py-12 md:py-16 overflow-hidden ${className}`}
+      className={`min-h-[100dvh] flex flex-col justify-center py-24 md:py-32 overflow-hidden ${className}`}
     >
       <div className="w-full max-w-7xl mx-auto px-6">
         {children}
@@ -28,197 +28,261 @@ function FadeInSection({ children, id, className = "", style = {} }: { children:
 }
 
 export default function Home() {
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [currentHeroImage, setCurrentHeroImage] = useState(0);
+
+  const localPhotos = [
+    "/img/ensaio/0bf01d89-e2f1-4d3f-8013-c1c0e72c106e.jpg",
+    "/img/ensaio/1b7525d0-0ab8-46ec-9ae9-5ddc0c5658dd.jpg",
+    "/img/ensaio/4b6d6f91-80fd-4c05-b145-b5ab6679271b.jpg",
+    "/img/ensaio/686a0a89-d214-47a4-9606-279ab673f558.jpg",
+    "/img/ensaio/7575732f-e406-41f1-b3d2-317517ce6c2b.jpg",
+    "/img/ensaio/8f45eda8-755c-4805-b680-aff5cc7efdfa.jpg",
+    "/img/ensaio/c86482ec-c16f-41aa-935a-aa3dab6f5ae6.jpg",
+  ];
+
+  const [storyImage, setStoryImage] = useState("/img/ensaio/022878dc-0675-43e1-b3a2-11641fcff23e.jpg");
+  const [heroImages, setHeroImages] = useState<string[]>(localPhotos);
+
+  useEffect(() => {
+    // Mantido apenas para inicialização simples sem loops desnecessários
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentHeroImage((prev) => (prev + 1) % heroImages.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [heroImages.length]);
+
   return (
     <div className="min-h-screen flex flex-col font-sans selection:bg-primary/20 selection:text-primary bg-[#FAF6F3] overflow-x-hidden max-w-full w-full">
-      {/* 0. Header / Navigation exactly like the image */}
-      <header className="absolute top-0 left-0 w-full z-40 bg-transparent">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          {/* Logo Monogram I | W with Leaf wreath underneath */}
-          <div className="flex flex-col items-center">
-            <span className="font-serif text-2xl md:text-3xl tracking-widest font-light text-[#3C2D24]">
-              I &nbsp;|&nbsp; W
-            </span>
-            {/* Elegant tiny leaf wreath ornament */}
-            <svg className="w-12 h-4 text-[#8F6E56]/70 mt-1" viewBox="0 0 100 20" fill="currentColor">
-              <path d="M50,15 C45,11 32,8 20,13 C32,6 45,9 50,15 Z" />
-              <path d="M50,15 C55,11 68,8 80,13 C68,6 55,9 50,15 Z" />
-              <circle cx="50" cy="8" r="1.5" />
-            </svg>
+      {/* 0. Header / Navigation - Floating Glass Pill Menu */}
+      <header className={`fixed top-0 left-0 w-full z-50 transition-editorial ${scrolled ? "py-3 px-4 md:px-12" : "py-6 px-6 md:px-16"
+        }`}>
+        <div className={`max-w-5xl mx-auto flex justify-between items-center transition-editorial ${scrolled
+            ? "bg-[#FAF6F3]/80 backdrop-blur-md px-6 py-3 rounded-subtle-nav shadow-[0_4px_30px_rgba(60,45,36,0.04)]"
+            : "bg-transparent px-0 py-0"
+          }`}>
+          {/* Logo Monogram */}
+          <div className="flex flex-col items-center select-none py-1">
+            <img
+              src="/img/logo2.png"
+              alt="Isadora & Wander Monograma"
+              className="h-8 md:h-10 w-auto object-contain"
+            />
           </div>
 
-          <nav className="hidden md:flex items-center gap-8 text-[10px] uppercase tracking-[0.25em] font-semibold text-[#3C2D24]">
-            <a href="#sobre" className="hover:opacity-70 transition border-b-2 border-primary pb-1">Início</a>
-            <a href="#sobre" className="hover:opacity-70 transition pb-1">Nossa História</a>
-            <a href="#detalhes" className="hover:opacity-70 transition pb-1">Detalhes</a>
-            <a href="#local" className="hover:opacity-70 transition pb-1">Local</a>
-            <a href="#presentes" className="hover:opacity-70 transition pb-1">Presentes</a>
-            <a href="#rsvp" className="hover:opacity-70 transition pb-1">Confirmação</a>
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex items-center gap-8 text-[9px] uppercase tracking-[0.25em] font-semibold text-espresso">
+            <a href="#" className="hover:opacity-60 transition-editorial">Início</a>
+            <a href="#sobre" className="hover:opacity-60 transition-editorial">História</a>
+            <a href="#detalhes" className="hover:opacity-60 transition-editorial">Detalhes</a>
+            <a href="#local" className="hover:opacity-60 transition-editorial">Local</a>
+            <a href="#presentes" className="hover:opacity-60 transition-editorial">Presentes</a>
+            <a href="#padrinhos" className="hover:opacity-60 transition-editorial">Padrinhos</a>
           </nav>
 
-          <motion.a
-            whileHover={{ scale: 1.05, y: -1 }}
-            whileTap={{ scale: 0.98 }}
-            href="#rsvp"
-            className="bg-[#8F6E56] hover:bg-[#7A5C46] text-white px-5 py-2 rounded-full text-[10px] font-semibold uppercase tracking-[0.2em] transition shadow-sm inline-block"
+          {/* Desktop CTA Button */}
+          <div className="hidden md:block">
+            <motion.a
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              href="#rsvp"
+              className="bg-primary hover:bg-[#7A5C46] text-[#FAF6F3] px-5 py-2.5 rounded-subtle-btn text-[9px] font-semibold uppercase tracking-wider transition-editorial shadow-sm inline-flex items-center gap-1.5 active:scale-95"
+            >
+              <span>Confirmar Presença</span>
+              <span className="text-[10px]">↗</span>
+            </motion.a>
+          </div>
+
+          {/* Mobile Hamburger Button */}
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="md:hidden w-9 h-9 rounded-subtle-btn border border-border/60 flex items-center justify-center text-espresso bg-[#FAF6F3]/50 hover:bg-[#FAF6F3] transition-editorial cursor-pointer"
+            aria-label="Menu"
           >
-            Confirmar Presença
-          </motion.a>
+            {menuOpen ? <X size={16} /> : <List size={16} />}
+          </button>
         </div>
       </header>
 
-      {/* 1. Capa inicial (Hero Section matching the image exactly, with cutoff fix) */}
-      <section className="relative h-[100dvh] min-h-[600px] flex flex-col justify-between overflow-hidden bg-cover bg-center pt-24 pb-6" style={{ backgroundImage: "url('/img/hero-bg.png')" }}>
-        <div className="absolute inset-0 bg-[#FAF6F3]/10 z-0" />
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-40 bg-[#FAF6F3]/95 backdrop-blur-md flex flex-col justify-center items-center md:hidden"
+          >
+            <nav className="flex flex-col items-center gap-8 text-center">
+              {[
+                { name: "Início", href: "#" },
+                { name: "Nossa História", href: "#sobre" },
+                { name: "Detalhes", href: "#detalhes" },
+                { name: "Como Chegar", href: "#local" },
+                { name: "Lista de Presentes", href: "#presentes" },
+                { name: "Manual dos Padrinhos", href: "#padrinhos" },
+              ].map((item, index) => (
+                <motion.a
+                  key={item.name}
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: index * 0.08, ease: [0.32, 0.72, 0, 1] }}
+                  href={item.href}
+                  onClick={() => setMenuOpen(false)}
+                  className="font-serif text-2xl font-light text-espresso tracking-wide hover:text-primary transition-colors"
+                >
+                  {item.name}
+                </motion.a>
+              ))}
+              <motion.a
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.6, ease: [0.32, 0.72, 0, 1] }}
+                href="#rsvp"
+                onClick={() => setMenuOpen(false)}
+                className="bg-primary hover:bg-[#7A5C46] text-[#FAF6F3] px-8 py-3.5 rounded-subtle-btn text-[10px] font-semibold uppercase tracking-[0.2em] transition shadow-md inline-block mt-4"
+              >
+                Confirmar Presença
+              </motion.a>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* 1. Capa inicial (Hero Section) */}
+      <section className="relative h-[100dvh] min-h-[600px] flex flex-col justify-between overflow-hidden pt-24 pb-12">
+        {/* Carousel Background */}
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <AnimatePresence mode="popLayout">
+            <motion.div
+              key={currentHeroImage}
+              initial={{ opacity: 0, scale: 1.1 }}
+              animate={{ opacity: 0.88, scale: 1.05 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 2.0, ease: "easeInOut" }}
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: `url('${heroImages[currentHeroImage]}')` }}
+            />
+          </AnimatePresence>
+          {/* Scrim horizontal wash overlay for left-aligned text readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#FAF6F3]/95 via-[#FAF6F3]/60 to-transparent z-10" />
+        </div>
 
         {/* Spacer */}
         <div className="h-6" />
 
-        {/* Center content */}
-        <div className="relative z-10 max-w-4xl mx-auto px-6 text-center space-y-4 my-auto">
-          {/* Top Heart Leaf ornament */}
-          <div className="flex flex-col items-center justify-center space-y-1">
-            <svg className="w-12 h-6 text-[#8F6E56]/70" viewBox="0 0 100 30" fill="currentColor">
-              <path d="M50,20 C42,15 28,10 15,17 C28,8 42,12 50,20 Z" />
-              <path d="M50,20 C58,15 72,10 85,17 C72,8 58,12 50,20 Z" />
-              <path d="M50,7 C50,7 48.5,5 47,5 C45,5 44,6.5 44,8 C44,11 47.5,13 50,15 C52.5,13 56,11 56,8 C56,6.5 55,5 53,5 C51.5,5 50,7 50,7 Z" />
-            </svg>
-          </div>
+        {/* Left content */}
+        <div className="relative z-10 max-w-5xl mx-auto px-6 text-left space-y-6 my-auto w-full">
 
-          <h1 className="font-sans text-5xl md:text-7xl lg:text-8xl font-extralight tracking-wide leading-tight text-[#3C2D24] lowercase first-letter:uppercase">
+          <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-light tracking-wide leading-[1.1] text-espresso max-w-4xl">
             Vamos celebrar <br />
-            <span className="font-extralight">o amor</span>
+            <span className="font-extralight italic text-primary">o amor</span>
           </h1>
 
-          {/* Centered heart line separator */}
-          <div className="flex items-center justify-center gap-4 max-w-xs mx-auto">
-            <div className="h-[1px] bg-[#DCD0C0] flex-1" />
-            <span className="text-primary text-[10px]">•</span>
-            <div className="h-[1px] bg-[#DCD0C0] flex-1" />
+          {/* Left-aligned separator */}
+          <div className="flex items-center justify-start gap-4 max-w-xs">
+            <div className="h-[1px] bg-border flex-1" />
+            <span className="text-[#8F6E56] text-[8px]">♥</span>
+            <div className="h-[1px] bg-border flex-1" />
           </div>
 
-          <p className="text-[9px] md:text-xs text-[#8F6E56] tracking-[0.25em] uppercase font-semibold">
+          <p className="text-[10px] md:text-xs text-espresso/80 tracking-[0.25em] uppercase font-semibold">
             14 de Fevereiro de 2027 &nbsp;•&nbsp; São Paulo/SP
           </p>
 
-          <div className="pt-1">
+          <div className="pt-2 flex justify-start gap-4">
             <motion.a
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.98 }}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
               href="#rsvp"
-              className="bg-[#8F6E56] hover:bg-[#7A5C46] text-white px-8 py-3 rounded-full text-[10px] font-semibold uppercase tracking-[0.25em] transition inline-flex items-center gap-2 shadow-md"
+              className="bg-primary hover:bg-[#7A5C46] text-[#FAF6F3] px-8 py-3.5 rounded-subtle-btn text-[10px] font-semibold uppercase tracking-widest transition-editorial inline-flex items-center gap-2 shadow-md hover:shadow-lg active:scale-95 cursor-pointer"
             >
               <span>Confirmar Presença</span>
-              <span className="text-[11px]">♡</span>
+              <span className="text-[10px]">↗</span>
             </motion.a>
           </div>
         </div>
 
-        {/* Bottom Menu / Quick Access cards */}
-        <div className="relative z-10 max-w-5xl mx-auto w-full px-6 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-0 border-t border-border/40 pt-6 text-center">
-          <a href="#sobre" className="flex flex-col items-center space-y-1 group md:px-4">
-            <div className="w-9 h-9 rounded-full bg-transparent flex items-center justify-center text-[#8F6E56] border border-border group-hover:border-primary/50 transition">
-              <svg className="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-              </svg>
-            </div>
-            <span className="text-[9px] uppercase tracking-[0.2em] font-semibold text-[#3C2D24]">Nossa História</span>
-            <span className="text-[9px] text-[#8F6E56]/80 font-light leading-relaxed hidden sm:block font-sans">Como tudo começou.</span>
-          </a>
-
-          <a href="#detalhes" className="flex flex-col items-center space-y-1 group md:px-4 md:border-l border-border/40">
-            <div className="w-9 h-9 rounded-full bg-transparent flex items-center justify-center text-[#8F6E56] border border-border group-hover:border-primary/50 transition">
-              <svg className="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <span className="text-[9px] uppercase tracking-[0.2em] font-semibold text-[#3C2D24]">Detalhes</span>
-            <span className="text-[9px] text-[#8F6E56]/80 font-light leading-relaxed hidden sm:block font-sans">Cerimônia, recepção e traje.</span>
-          </a>
-
-          <a href="#presentes" className="flex flex-col items-center space-y-1 group md:px-4 md:border-l border-border/40">
-            <div className="w-9 h-9 rounded-full bg-transparent flex items-center justify-center text-[#8F6E56] border border-border group-hover:border-primary/50 transition">
-              <svg className="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0v11.25m-8.25-6h16.5" />
-              </svg>
-            </div>
-            <span className="text-[9px] uppercase tracking-[0.2em] font-semibold text-[#3C2D24]">Presentes</span>
-            <span className="text-[9px] text-[#8F6E56]/80 font-light leading-relaxed hidden sm:block font-sans">Nossa lista de presentes.</span>
-          </a>
-
-          <a href="#rsvp" className="flex flex-col items-center space-y-1 group md:px-4 md:border-l border-border/40">
-            <div className="w-9 h-9 rounded-full bg-transparent flex items-center justify-center text-[#8F6E56] border border-border group-hover:border-primary/50 transition">
-              <svg className="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
-              </svg>
-            </div>
-            <span className="text-[9px] uppercase tracking-[0.2em] font-semibold text-[#3C2D24]">Confirmação</span>
-            <span className="text-[9px] text-[#8F6E56]/80 font-light leading-relaxed hidden sm:block font-sans">Confirme sua presença.</span>
-          </a>
-        </div>
-
-        {/* Smooth Gradient Fade */}
-        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-[#FAF6F3] to-transparent pointer-events-none z-20" />
       </section>
 
-      {/* 2. Sobre o casal + contagem regressiva (left content occupying 2/3, right image occupying 1/3) */}
-      <FadeInSection id="sobre" className="bg-[#FAF6F3] py-24 min-h-[100dvh] flex flex-col justify-center">
-        <div className="flex flex-col lg:flex-row gap-12 items-center lg:items-stretch px-4 md:px-12 lg:px-20">
-          {/* Left side: 2/3 width for text content and countdown */}
-          <div className="w-full lg:w-2/3 space-y-8 text-center lg:text-left flex flex-col justify-between">
+      {/* 2. Sobre o casal + contagem regressiva (Bento Grid Asimétrico) */}
+      <FadeInSection id="sobre" className="bg-[#FAF6F3] py-32 flex flex-col justify-center">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-4 md:px-12 lg:px-20 items-stretch">
+          {/* Card 1: Text Area (2/3 width) - Single Bezel Card */}
+          <div className="md:col-span-2 bg-[#FAF6F3] border border-border p-8 md:p-10 flex flex-col justify-between space-y-6 transition-editorial hover:shadow-md">
             <div className="space-y-6">
-              {/* Top Branch Wreath Ornament */}
-              <div className="hidden md:flex justify-start">
-                <svg className="w-16 h-6 text-[#8F6E56]/70" viewBox="0 0 100 30" fill="currentColor">
+              <div className="flex justify-start">
+                <svg className="w-16 h-6 text-[#8F6E56]/60" viewBox="0 0 100 30" fill="currentColor">
                   <path d="M50,20 C42,15 28,10 15,17 C28,8 42,12 50,20 Z" />
                   <path d="M50,20 C58,15 72,10 85,17 C72,8 58,12 50,20 Z" />
                   <path d="M50,7 C50,7 48.5,5 47,5 C45,5 44,6.5 44,8 C44,11 47.5,13 50,15 C52.5,13 56,11 56,8 C56,6.5 55,5 53,5 C51.5,5 50,7 50,7 Z" />
                 </svg>
               </div>
 
-              <div className="space-y-3 text-center lg:text-left">
-                <h2 className="font-sans text-5xl md:text-7xl lg:text-8xl text-[#3C2D24] font-extralight tracking-wide leading-[0.95]">
-                  O Nosso <br /> Casamento
+              <div className="space-y-4">
+                <h2 className="font-serif text-4xl md:text-6xl text-espresso font-light tracking-wide leading-[1.1]">
+                  O Nosso <br /> <span className="italic text-primary">Casamento</span>
                 </h2>
 
-                {/* Swirl Infinity Divider Line */}
-                <div className="flex justify-center lg:justify-start items-center py-2 text-[#DCD0C0]">
+                <div className="flex justify-start items-center py-1 text-border">
                   <svg className="w-28 h-3" viewBox="0 0 120 10" fill="none" stroke="currentColor" strokeWidth="1">
                     <path d="M0,5 L50,5 C52,5 54,3 56,3 C58,3 59,5 60,5 C61,5 62,7 64,7 C66,7 68,5 70,5 L120,5" />
                     <circle cx="60" cy="5" r="1.5" fill="currentColor" />
                   </svg>
                 </div>
 
-                <p className="text-[#3C2D24]/90 text-xs md:text-sm leading-relaxed font-sans font-light tracking-wide w-full text-center lg:text-left">
-                  Sejam bem-vindos! Criamos este espaço para compartilhar todos os detalhes do nosso grande dia e facilitar a sua confirmação de presença.
+                <p className="text-espresso/90 text-sm leading-relaxed font-sans font-light tracking-wide max-w-[60ch]">
+                  Sejam muito bem-vindos ao nosso space! Criamos este site para compartilhar com vocês cada detalhe planejado com muito carinho para o nosso grande dia. Aqui vocês encontrarão as dicas de hospedagem, local do evento, manual dos padrinhos e nossa lista de presentes simbólicos.
+                </p>
+
+                <p className="text-espresso/90 text-sm leading-relaxed font-sans font-light tracking-wide max-w-[60ch]">
+                  Não se esqueçam de confirmar sua presença na aba de confirmação para nos ajudar na organização perfeita deste momento único.
                 </p>
               </div>
             </div>
 
-            {/* Countdown Box (Left aligned, occupying full 2/3 width of the section container) */}
-            <div className="bg-[#F5EFEB] border border-border/80 rounded-[3rem] p-4 sm:p-8 w-full shadow-sm space-y-4">
-              <div className="space-y-1">
-                <h3 className="text-[9px] uppercase tracking-[0.25em] text-[#8F6E56] font-semibold">Contagem Regressiva</h3>
-                <div className="flex items-center justify-start gap-2 max-w-[80px] text-[#DCD0C0]">
-                  <div className="h-[1px] bg-current flex-1" />
-                  <span className="text-[8px]">♥</span>
-                  <div className="h-[1px] bg-current flex-1" />
-                </div>
-              </div>
-              <div className="w-full">
-                <Countdown />
-              </div>
+            <div className="pt-4 border-t border-border/30">
+              <span className="font-serif text-sm italic text-[#8F6E56]">Com amor, Isadora & Wander.</span>
             </div>
           </div>
 
-          {/* Right side: 1/3 width for the couple image, hidden on mobile */}
-          <div className="hidden lg:flex w-full lg:w-1/3 items-center justify-center">
-            <div className="w-full h-full min-h-[350px] lg:min-h-[500px]">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/img/nossocasamento.png"
-                alt="Nosso Casamento"
-                className="w-full h-full object-contain"
+          {/* Card 2: Photo Area (1/3 width) - Single Bezel Card */}
+          <div className="md:col-span-1 bg-[#FAF6F3] border border-border p-4 flex flex-col justify-between space-y-4 transition-editorial hover:shadow-md group">
+            <div className="relative w-full flex-1 min-h-[300px] overflow-hidden bg-[#F5EFEB] border border-border/10">
+              <motion.img
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
+                src={storyImage}
+                alt="Nosso Ensaio"
+                onError={() => setStoryImage("/img/nossocasamento.png")}
+                className="w-full h-full object-cover cursor-zoom-in"
               />
+            </div>
+            <div className="px-1 text-center">
+              <span className="text-[8px] uppercase tracking-widest text-accent font-semibold">14.02.2027</span>
+            </div>
+          </div>
+
+          {/* Card 3: Countdown Area (Full Width 3/3) - Single Bezel Card */}
+          <div className="md:col-span-3 bg-[#FAF6F3] border border-border p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 transition-editorial hover:shadow-md">
+            <div className="space-y-1 text-center md:text-left shrink-0">
+              <span className="text-[8px] uppercase tracking-[0.25em] text-[#8F6E56] font-semibold block">Contagem Regressiva</span>
+              <h3 className="font-serif text-xl font-light text-espresso italic">Para o grande sim...</h3>
+            </div>
+            <div className="w-full max-w-3xl">
+              <Countdown />
             </div>
           </div>
         </div>
@@ -227,28 +291,29 @@ export default function Home() {
       {/* 3. Lista de presentes simbólicos */}
       <FadeInSection
         id="presentes"
-        className="relative overflow-hidden py-24 border-y border-border/60 bg-[#F5EFEB]"
+        className="relative overflow-hidden py-32 border-y border-border/60 bg-[#F5EFEB]/50"
       >
         <div className="relative z-10 px-4 md:px-12 lg:px-20">
-          <div className="flex flex-col lg:flex-row-reverse gap-12 items-start">
-            {/* Left/Right side: 1/3 width for the big title, now shifted to the right */}
-            <div className="w-full lg:w-1/3 space-y-6 text-center lg:text-right flex flex-col items-center lg:items-end bg-transparent p-0 z-10">
-              <div className="space-y-3 w-full text-center lg:text-right">
-                <h2 className="font-sans text-5xl md:text-7xl lg:text-5xl xl:text-6xl text-foreground font-extralight tracking-wide leading-[0.95]">
-                  Lista de <br /> Casamento
+          <div className="flex flex-col lg:flex-row gap-16 items-start">
+            {/* Left/Right side: 1/3 width for the big title */}
+            <div className="w-full lg:w-1/3 space-y-6 text-center lg:text-left flex flex-col items-center lg:items-start bg-transparent p-0 z-10">
+              <div className="space-y-3 w-full text-center lg:text-left">
+                <span className="text-[8px] uppercase tracking-widest text-[#8F6E56] font-semibold block">Lista de Presentes</span>
+                <h2 className="font-serif text-4xl md:text-6xl text-espresso font-light tracking-wide leading-[1.1]">
+                  Lista de <br /> <span className="italic text-primary">Casamento</span>
                 </h2>
               </div>
 
-              {/* Swirl Infinity Divider Line */}
-              <div className="flex justify-center lg:justify-end items-center py-1 text-[#DCD0C0] w-full">
+              {/* Separator */}
+              <div className="flex justify-center lg:justify-start items-center py-1 text-border w-full">
                 <svg className="w-28 h-3" viewBox="0 0 120 10" fill="none" stroke="currentColor" strokeWidth="1">
                   <path d="M0,5 L50,5 C52,5 54,3 56,3 C58,3 59,5 60,5 C61,5 62,7 64,7 C66,7 68,5 70,5 L120,5" />
                   <circle cx="60" cy="5" r="1.5" fill="currentColor" />
                 </svg>
               </div>
 
-              <p className="text-[#8F6E56] text-xs leading-relaxed font-sans font-light max-w-[35ch] mx-auto lg:ml-auto lg:mr-0 text-center lg:text-right">
-                Caso queira nos presentear, escolha uma opção simbólica abaixo. Os valores serão enviados diretamente para nossa conta via PIX.
+              <p className="text-espresso/80 text-xs leading-relaxed font-sans font-light max-w-[35ch] mx-auto lg:mr-auto lg:ml-0 text-center lg:text-left">
+                Caso queira nos presentear de forma simbólica, escolha uma das cotas ou presentes especiais abaixo. Os valores correspondentes serão transferidos diretamente para nós.
               </p>
             </div>
 
@@ -260,63 +325,68 @@ export default function Home() {
         </div>
       </FadeInSection>
 
-      {/* 4. Informações úteis para convidados */}
+      {/* 4. Informações úteis para convidados (Editorial Split Layout) */}
       <FadeInSection id="detalhes" className="bg-[#FAF6F3]">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-stretch px-4 md:px-12 lg:px-20">
-          <div className="lg:col-span-2 space-y-6">
-            {/* Top Branch Wreath Ornament */}
-            <div className="flex justify-center lg:justify-start">
-              <svg className="w-16 h-6 text-[#8F6E56]/70" viewBox="0 0 100 30" fill="currentColor">
-                <path d="M50,20 C42,15 28,10 15,17 C28,8 42,12 50,20 Z" />
-                <path d="M50,20 C58,15 72,10 85,17 C72,8 58,12 50,20 Z" />
-                <path d="M50,7 C50,7 48.5,5 47,5 C45,5 44,6.5 44,8 C44,11 47.5,13 50,15 C52.5,13 56,11 56,8 C56,6.5 55,5 53,5 C51.5,5 50,7 50,7 Z" />
-              </svg>
-            </div>
-
-            <div className="space-y-3 text-center lg:text-left">
-              <h2 className="font-sans text-5xl md:text-7xl lg:text-8xl text-foreground font-extralight tracking-wide leading-[0.95]">
-                Informações <br /> Gerais
-              </h2>
-
-              {/* Swirl Infinity Divider Line */}
-              <div className="flex justify-center lg:justify-start items-center py-2 text-[#DCD0C0]">
-                <svg className="w-28 h-3" viewBox="0 0 120 10" fill="none" stroke="currentColor" strokeWidth="1">
-                  <path d="M0,5 L50,5 C52,5 54,3 56,3 C58,3 59,5 60,5 C61,5 62,7 64,7 C66,7 68,5 70,5 L120,5" />
-                  <circle cx="60" cy="5" r="1.5" fill="currentColor" />
+          <div className="lg:col-span-2 space-y-8 flex flex-col justify-between py-4">
+            <div className="space-y-6">
+              <div className="flex justify-start">
+                <svg className="w-16 h-6 text-[#8F6E56]/60" viewBox="0 0 100 30" fill="currentColor">
+                  <path d="M50,20 C42,15 28,10 15,17 C28,8 42,12 50,20 Z" />
+                  <path d="M50,20 C58,15 72,10 85,17 C72,8 58,12 50,20 Z" />
+                  <path d="M50,7 C50,7 48.5,5 47,5 C45,5 44,6.5 44,8 C44,11 47.5,13 50,15 C52.5,13 56,11 56,8 C56,6.5 55,5 53,5 C51.5,5 50,7 50,7 Z" />
                 </svg>
               </div>
-            </div>
 
-            <div className="space-y-5 pt-4">
-              <div className="flex gap-4 items-start">
-                <div className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-primary shrink-0">
-                  <Calendar size={18} />
-                </div>
-                <div>
-                  <h4 className="font-serif text-sm font-medium text-foreground">Cerimônia e Recepção</h4>
-                  <p className="text-[#8F6E56] text-xs mt-1 font-sans font-light">Domingo, 14 de Fevereiro de 2027, às 17:00</p>
-                </div>
-              </div>
+              <div className="space-y-4">
+                <span className="text-[8px] uppercase tracking-widest text-[#8F6E56] font-semibold block">Informações Úteis</span>
+                <h2 className="font-serif text-4xl md:text-6xl text-espresso font-light tracking-wide leading-[1.1]">
+                  Detalhes do <br /> <span className="italic text-primary">Grande Dia</span>
+                </h2>
 
-              <div className="flex gap-4 items-start">
-                <div className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-primary shrink-0">
-                  <MapPin size={18} />
-                </div>
-                <div>
-                  <h4 className="font-serif text-sm font-medium text-foreground">Espaço Vila Mariana</h4>
-                  <p className="text-[#8F6E56] text-xs mt-1 font-sans font-light">R. Domingos de Morais, 2561 - Vila Mariana, São Paulo - SP</p>
+                <div className="flex justify-start items-center py-1 text-border">
+                  <svg className="w-28 h-3" viewBox="0 0 120 10" fill="none" stroke="currentColor" strokeWidth="1">
+                    <path d="M0,5 L50,5 C52,5 54,3 56,3 C58,3 59,5 60,5 C61,5 62,7 64,7 C66,7 68,5 70,5 L120,5" />
+                    <circle cx="60" cy="5" r="1.5" fill="currentColor" />
+                  </svg>
                 </div>
               </div>
             </div>
 
-            <div className="pt-4 flex justify-center">
+            <div className="space-y-8 pt-4">
+              <div className="flex gap-5 items-start">
+                <div className="w-12 h-12 rounded-full border border-border/60 flex items-center justify-center text-primary bg-[#F5EFEB]/50 shrink-0">
+                  <Calendar size={20} />
+                </div>
+                <div className="space-y-1">
+                  <h4 className="font-serif text-base font-light text-espresso">Cerimônia e Recepção</h4>
+                  <p className="text-espresso/70 text-xs font-sans font-light leading-relaxed">
+                    Domingo, 14 de Fevereiro de 2027, às 17:00.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-5 items-start">
+                <div className="w-12 h-12 rounded-full border border-border/60 flex items-center justify-center text-primary bg-[#F5EFEB]/50 shrink-0">
+                  <MapPin size={20} />
+                </div>
+                <div className="space-y-1">
+                  <h4 className="font-serif text-base font-light text-espresso">Espaço Vila Mariana</h4>
+                  <p className="text-espresso/70 text-xs font-sans font-light leading-relaxed">
+                    Rua Domingos de Morais, 2561 - Vila Mariana, São Paulo - SP.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-6">
               <motion.a
-                whileHover={{ scale: 1.05, y: -2 }}
+                whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                href="https://maps.google.com"
+                href="https://maps.google.com/?q=Rua+Domingos+de+Morais,+2561+-+Vila+Mariana,+S%C3%A3o+Paulo+-+SP"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-primary hover:bg-primary-hover text-white px-5 py-3 rounded-full text-[10px] font-medium tracking-wider uppercase transition shadow-sm"
+                className="inline-flex items-center gap-2 bg-primary hover:bg-[#7A5C46] text-[#FAF6F3] px-6 py-3.5 rounded-full text-[10px] font-semibold uppercase tracking-wider transition-editorial shadow-sm active:scale-95 cursor-pointer"
               >
                 <MapPin size={14} />
                 <span>Abrir no Google Maps</span>
@@ -324,14 +394,17 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="lg:col-span-1 bg-[#F5EFEB] border border-border/80 p-8 md:p-10 rounded-[3rem] flex flex-col justify-center space-y-6">
-            <h4 className="font-sans text-lg md:text-xl font-light tracking-wide text-foreground flex items-center gap-3">
-              <Bed size={24} className="text-primary" />
-              <span>Hospedagem & Deslocamento</span>
+          {/* Right side: Hospedagem details - Single Bezel Card */}
+          <div className="lg:col-span-1 bg-[#FAF6F3] border border-border p-8 md:p-10 flex flex-col justify-center transition-editorial hover:shadow-md space-y-6">
+            <div className="w-12 h-12 bg-primary/10 text-primary rounded-full flex items-center justify-center">
+              <Bed size={22} />
+            </div>
+            <h4 className="font-serif text-xl font-light text-espresso">
+              Hospedagem & <br /> <span className="italic text-primary">Deslocamento</span>
             </h4>
-            <div className="space-y-4 text-[#8F6E56] text-sm md:text-base leading-relaxed font-sans font-light border-t border-border/40 pt-6">
+            <div className="space-y-4 text-espresso/80 text-xs leading-relaxed font-sans font-light border-t border-border/20 pt-6">
               <p>
-                Para os convidados que vêm de fora de São Paulo, sugerimos o <strong>Comfort Hotel Vila Mariana</strong>, localizado a apenas 5 minutos do evento.
+                Para os convidados que vêm de fora de São Paulo, sugerimos o <strong className="font-medium text-espresso">Comfort Hotel Vila Mariana</strong>, localizado a apenas 5 minutos do evento.
               </p>
               <p>
                 Recomendamos o deslocamento por táxi ou carros de aplicativo. Para quem prefere transporte público, a estação de metrô Vila Mariana fica a 400 metros do local.
@@ -342,27 +415,26 @@ export default function Home() {
       </FadeInSection>
 
       {/* 5. Como Chegar / Local do Evento */}
-      <FadeInSection id="local" className="bg-[#F2ECE6] border-y border-border/60">
+      <FadeInSection id="local" className="bg-[#F2ECE6]/50 border-y border-border/60">
         <div className="flex flex-col lg:flex-row-reverse gap-12 items-stretch px-4 md:px-12 lg:px-20">
           {/* Right column (1/3 width) - Title and directions info */}
-          <div className="w-full lg:w-1/3 flex flex-col justify-between space-y-8 text-center lg:text-right items-center lg:items-end">
+          <div className="w-full lg:w-1/3 flex flex-col justify-between space-y-8 text-center lg:text-right items-center lg:items-end py-4">
             <div className="space-y-6 w-full">
-              {/* Top Branch Wreath Ornament */}
               <div className="flex justify-center lg:justify-end">
-                <svg className="w-16 h-6 text-[#8F6E56]/70" viewBox="0 0 100 30" fill="currentColor">
+                <svg className="w-16 h-6 text-[#8F6E56]/60" viewBox="0 0 100 30" fill="currentColor">
                   <path d="M50,20 C42,15 28,10 15,17 C28,8 42,12 50,20 Z" />
                   <path d="M50,20 C58,15 72,10 85,17 C72,8 58,12 50,20 Z" />
                   <path d="M50,7 C50,7 48.5,5 47,5 C45,5 44,6.5 44,8 C44,11 47.5,13 50,15 C52.5,13 56,11 56,8 C56,6.5 55,5 53,5 C51.5,5 50,7 50,7 Z" />
                 </svg>
               </div>
 
-              <div className="space-y-3 w-full text-center lg:text-right">
-                <h2 className="font-sans text-5xl md:text-7xl lg:text-8xl text-foreground font-extralight tracking-wide leading-[0.95] lowercase first-letter:uppercase">
-                  Como <br /> Chegar
+              <div className="space-y-4 w-full">
+                <span className="text-[8px] uppercase tracking-widest text-[#8F6E56] font-semibold block">Local do Casamento</span>
+                <h2 className="font-serif text-4xl md:text-6xl text-espresso font-light tracking-wide leading-[1.1]">
+                  Como <br /> <span className="italic text-primary">Chegar</span>
                 </h2>
 
-                {/* Swirl Infinity Divider Line */}
-                <div className="flex justify-center lg:justify-end items-center py-2 text-[#DCD0C0]">
+                <div className="flex justify-center lg:justify-end items-center py-1 text-border">
                   <svg className="w-28 h-3" viewBox="0 0 120 10" fill="none" stroke="currentColor" strokeWidth="1">
                     <path d="M0,5 L50,5 C52,5 54,3 56,3 C58,3 59,5 60,5 C61,5 62,7 64,7 C66,7 68,5 70,5 L120,5" />
                     <circle cx="60" cy="5" r="1.5" fill="currentColor" />
@@ -371,51 +443,49 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Directions details card */}
-            <div className="w-full bg-[#F5EFEB] border border-border/80 p-8 rounded-[3rem] text-left space-y-6 flex-1 flex flex-col justify-center">
-              <div className="space-y-4">
-                <div className="flex gap-3 items-start">
-                  <div className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-primary shrink-0">
-                    <Car size={16} />
-                  </div>
-                  <div>
-                    <h4 className="font-serif text-sm font-medium text-foreground">De Carro</h4>
-                    <p className="text-[#8F6E56] text-xs mt-0.5 font-sans font-light leading-relaxed">
-                      O local possui serviço de valet na porta do evento e estacionamento conveniado próximo.
-                    </p>
-                  </div>
+            {/* Directions details card - Single Bezel */}
+            <div className="w-full bg-[#FAF6F3] border border-border p-6 space-y-5 text-left transition-editorial hover:shadow-md">
+              <div className="flex gap-4 items-start">
+                <div className="w-9 h-9 rounded-full border border-border/60 flex items-center justify-center text-primary bg-[#F5EFEB]/50 shrink-0">
+                  <Car size={16} />
                 </div>
-
-                <div className="flex gap-3 items-start">
-                  <div className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-primary shrink-0">
-                    <Train size={16} />
-                  </div>
-                  <div>
-                    <h4 className="font-serif text-sm font-medium text-foreground">De Metrô</h4>
-                    <p className="text-[#8F6E56] text-xs mt-0.5 font-sans font-light leading-relaxed">
-                      A estação <strong>Vila Mariana</strong> (Linha 1 - Azul) fica a 400 metros do local (5 minutos a pé).
-                    </p>
-                  </div>
+                <div className="space-y-0.5">
+                  <h4 className="font-serif text-sm font-medium text-espresso">De Carro</h4>
+                  <p className="text-espresso/70 text-xs font-sans font-light leading-relaxed">
+                    O local possui serviço de valet na porta e estacionamento conveniado próximo.
+                  </p>
                 </div>
+              </div>
 
-                <div className="flex gap-3 items-start">
-                  <div className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-primary shrink-0">
-                    <DeviceMobile size={16} />
-                  </div>
-                  <div>
-                    <h4 className="font-serif text-sm font-medium text-foreground">De Aplicativo</h4>
-                    <p className="text-[#8F6E56] text-xs mt-0.5 font-sans font-light leading-relaxed">
-                      Insira o endereço <strong>Rua Domingos de Morais, 2561</strong> no app de sua preferência. O embarque e desembarque são fáceis na frente.
-                    </p>
-                  </div>
+              <div className="flex gap-4 items-start">
+                <div className="w-9 h-9 rounded-full border border-border/60 flex items-center justify-center text-primary bg-[#F5EFEB]/50 shrink-0">
+                  <Train size={16} />
+                </div>
+                <div className="space-y-0.5">
+                  <h4 className="font-serif text-sm font-medium text-espresso">De Metrô</h4>
+                  <p className="text-espresso/70 text-xs font-sans font-light leading-relaxed">
+                    A estação <strong className="font-medium text-espresso">Vila Mariana</strong> (Linha 1 - Azul) fica a apenas 400m.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-4 items-start">
+                <div className="w-9 h-9 rounded-full border border-border/60 flex items-center justify-center text-primary bg-[#F5EFEB]/50 shrink-0">
+                  <DeviceMobile size={16} />
+                </div>
+                <div className="space-y-0.5">
+                  <h4 className="font-serif text-sm font-medium text-espresso">De Aplicativo</h4>
+                  <p className="text-espresso/70 text-xs font-sans font-light leading-relaxed">
+                    Insira o endereço <strong className="font-medium text-espresso">Rua Domingos de Morais, 2561</strong> no app de preferência.
+                  </p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Left column (2/3 width) - Google Map */}
-          <div className="w-full lg:w-2/3 flex flex-col justify-between space-y-6">
-            <div className="w-full h-full min-h-[400px] rounded-[3rem] overflow-hidden border border-border/80 shadow-sm relative bg-[#F5EFEB]">
+          {/* Left column (2/3 width) - Google Map - Inside Single Bezel */}
+          <div className="w-full lg:w-2/3 flex flex-col justify-between space-y-6 py-4">
+            <div className="w-full h-full min-h-[400px] bg-[#FAF6F3] border border-border shadow-sm relative overflow-hidden">
               <iframe
                 src="https://maps.google.com/maps?q=R.%20Domingos%20de%20Morais,%202561%20-%20Vila%20Mariana,%20S%C3%A3o%20Paulo%20-%20SP&t=&z=16&ie=UTF8&iwloc=&output=embed"
                 width="100%"
@@ -427,20 +497,20 @@ export default function Home() {
                 className="w-full h-full opacity-90 hover:opacity-100 transition duration-300"
               />
             </div>
-            <div className="flex justify-between items-center text-left px-6">
+            <div className="flex flex-col sm:flex-row justify-between items-center text-center sm:text-left px-6 gap-4">
               <div>
-                <h4 className="font-serif text-sm font-medium text-foreground">Espaço Vila Mariana</h4>
-                <p className="text-[#8F6E56] text-xs mt-0.5 font-sans font-light">
+                <h4 className="font-serif text-base font-light text-espresso">Espaço Vila Mariana</h4>
+                <p className="text-espresso/70 text-xs font-sans font-light">
                   Rua Domingos de Morais, 2561 - Vila Mariana, São Paulo - SP
                 </p>
               </div>
               <motion.a
-                whileHover={{ scale: 1.05, y: -2 }}
+                whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 href="https://maps.google.com/?q=Rua+Domingos+de+Morais,+2561+-+Vila+Mariana,+S%C3%A3o+Paulo+-+SP"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-[#8F6E56] hover:bg-[#7A5C46] text-[#FAF6F3] px-5 py-2.5 rounded-full text-[9px] font-semibold tracking-wider uppercase transition shadow-sm"
+                className="inline-flex items-center gap-2 bg-[#8F6E56] hover:bg-[#7A5C46] text-[#FAF6F3] px-6 py-3 rounded-full text-[10px] font-semibold tracking-wider uppercase transition-editorial shadow-sm active:scale-95 cursor-pointer"
               >
                 <MapPin size={12} />
                 <span>Como Chegar</span>
@@ -450,25 +520,25 @@ export default function Home() {
         </div>
       </FadeInSection>
 
+      {/* Manual dos Padrinhos */}
       <FadeInSection id="padrinhos" className="bg-[#FAF6F3] border-b border-border/60">
         <div className="px-4 md:px-12 lg:px-20">
-          <div className="text-center lg:text-right w-full space-y-4 mb-12 flex flex-col items-center lg:items-end">
-            {/* Top Branch Wreath Ornament */}
-            <div className="flex justify-center lg:justify-end w-full">
-              <svg className="w-16 h-6 text-[#8F6E56]/70" viewBox="0 0 100 30" fill="currentColor">
+          <div className="text-center lg:text-left w-full space-y-4 mb-16 flex flex-col items-center lg:items-start">
+            <div className="flex justify-center lg:justify-start w-full">
+              <svg className="w-16 h-6 text-[#8F6E56]/60" viewBox="0 0 100 30" fill="currentColor">
                 <path d="M50,20 C42,15 28,10 15,17 C28,8 42,12 50,20 Z" />
                 <path d="M50,20 C58,15 72,10 85,17 C72,8 58,12 50,20 Z" />
                 <path d="M50,7 C50,7 48.5,5 47,5 C45,5 44,6.5 44,8 C44,11 47.5,13 50,15 C52.5,13 56,11 56,8 C56,6.5 55,5 53,5 C51.5,5 50,7 50,7 Z" />
               </svg>
             </div>
 
-            <div className="space-y-3 w-full">
-              <h2 className="font-sans text-5xl md:text-7xl lg:text-8xl text-foreground font-extralight tracking-wide leading-[0.95]">
-                Manual dos <br /> Padrinhos
+            <div className="space-y-4 w-full">
+              <span className="text-[8px] uppercase tracking-widest text-[#8F6E56] font-semibold block">Orientações aos Padrinhos</span>
+              <h2 className="font-serif text-4xl md:text-6xl text-espresso font-light tracking-wide leading-[1.1]">
+                Manual dos <br /> <span className="italic text-primary">Padrinhos</span>
               </h2>
 
-              {/* Swirl Infinity Divider Line */}
-              <div className="flex justify-center lg:justify-end items-center py-2 text-[#DCD0C0] w-full">
+              <div className="flex justify-center lg:justify-start items-center py-1 text-border w-full">
                 <svg className="w-28 h-3" viewBox="0 0 120 10" fill="none" stroke="currentColor" strokeWidth="1">
                   <path d="M0,5 L50,5 C52,5 54,3 56,3 C58,3 59,5 60,5 C61,5 62,7 64,7 C66,7 68,5 70,5 L120,5" />
                   <circle cx="60" cy="5" r="1.5" fill="currentColor" />
@@ -476,8 +546,8 @@ export default function Home() {
               </div>
             </div>
 
-            <p className="text-[#8F6E56] text-xs leading-relaxed font-sans font-light text-center lg:text-right">
-              Orientações importantes sobre trajes e horários para os nossos padrinhos e madrinhas.
+            <p className="text-espresso/80 text-xs leading-relaxed font-sans font-light text-center lg:text-left">
+              Ficamos muito felizes em ter vocês como nossos padrinhos e madrinhas! Preparamos este pequeno guia sobre trajes e horários para auxiliá-los.
             </p>
           </div>
           <GodparentsManual />
@@ -485,25 +555,24 @@ export default function Home() {
       </FadeInSection>
 
       {/* RSVP Form Section */}
-      <FadeInSection id="rsvp" className="bg-[#F5EFEB] border-b border-border/60">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center px-4 md:px-12 lg:px-20">
+      <FadeInSection id="rsvp" className="bg-[#F5EFEB]/50 border-b border-border/60">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center px-4 md:px-12 lg:px-20">
           <div className="lg:col-span-1 space-y-6 text-center lg:text-left">
-            {/* Top Branch Wreath Ornament */}
             <div className="flex justify-center lg:justify-start">
-              <svg className="w-16 h-6 text-[#8F6E56]/70" viewBox="0 0 100 30" fill="currentColor">
+              <svg className="w-16 h-6 text-[#8F6E56]/60" viewBox="0 0 100 30" fill="currentColor">
                 <path d="M50,20 C42,15 28,10 15,17 C28,8 42,12 50,20 Z" />
                 <path d="M50,20 C58,15 72,10 85,17 C72,8 58,12 50,20 Z" />
                 <path d="M50,7 C50,7 48.5,5 47,5 C45,5 44,6.5 44,8 C44,11 47.5,13 50,15 C52.5,13 56,11 56,8 C56,6.5 55,5 53,5 C51.5,5 50,7 50,7 Z" />
               </svg>
             </div>
 
-            <div className="space-y-3 text-center lg:text-left">
-              <h2 className="font-sans text-5xl md:text-7xl lg:text-8xl text-foreground font-extralight tracking-wide leading-[0.95]">
-                Confirmar <br /> Presença
+            <div className="space-y-4 text-center lg:text-left">
+              <span className="text-[8px] uppercase tracking-widest text-[#8F6E56] font-semibold block">Confirmação de Presença</span>
+              <h2 className="font-serif text-4xl md:text-6xl text-espresso font-light tracking-wide leading-[1.1]">
+                Confirmar <br /> <span className="italic text-primary">Presença</span>
               </h2>
 
-              {/* Swirl Infinity Divider Line */}
-              <div className="flex justify-center lg:justify-start items-center py-2 text-[#DCD0C0]">
+              <div className="flex justify-center lg:justify-start items-center py-1 text-border">
                 <svg className="w-28 h-3" viewBox="0 0 120 10" fill="none" stroke="currentColor" strokeWidth="1">
                   <path d="M0,5 L50,5 C52,5 54,3 56,3 C58,3 59,5 60,5 C61,5 62,7 64,7 C66,7 68,5 70,5 L120,5" />
                   <circle cx="60" cy="5" r="1.5" fill="currentColor" />
@@ -511,8 +580,8 @@ export default function Home() {
               </div>
             </div>
 
-            <p className="text-[#8F6E56] text-xs leading-relaxed font-sans font-light text-center lg:text-left">
-              Por favor, confirme sua presença até o dia 15/01/2027 para nos ajudar na organização.
+            <p className="text-espresso/80 text-xs leading-relaxed font-sans font-light text-center lg:text-left max-w-sm mx-auto lg:mx-0">
+              Por favor, confirme sua presença até o dia <strong className="font-medium text-espresso">15 de Janeiro de 2027</strong>. É muito importante para nós podermos planejar tudo perfeitamente.
             </p>
           </div>
           <div className="lg:col-span-1">
@@ -521,13 +590,19 @@ export default function Home() {
         </div>
       </FadeInSection>
 
-
-      {/* 7. Domínio personalizado (Footer) */}
-      <footer className="bg-card text-foreground py-12 border-t border-border/80">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
-          <div className="space-y-2">
-            <h3 className="font-serif text-lg tracking-wider font-light uppercase text-[#3C2D24]">Isadora & Wander</h3>
-            <p className="text-[#8F6E56] text-[10px] tracking-[0.2em] uppercase font-sans font-semibold">14 de Fevereiro de 2027</p>
+      {/* Footer */}
+      <footer className="bg-card text-foreground py-16 border-t border-border/60">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
+          <div className="space-y-3">
+            <img
+              src="/img/logo1.png"
+              alt="Isadora & Wander Logo"
+              className="h-10 md:h-12 w-auto object-contain mx-auto md:mx-0 opacity-90 hover:opacity-100 transition-editorial"
+            />
+            <p className="text-[#8F6E56] text-[9px] tracking-[0.25em] uppercase font-sans font-semibold">14 de Fevereiro de 2027</p>
+          </div>
+          <div className="text-espresso/60 text-[9px] uppercase tracking-widest font-semibold">
+            © 2027 Isadora & Wander. Todos os direitos reservados.
           </div>
         </div>
       </footer>
@@ -537,14 +612,14 @@ export default function Home() {
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 1.5, type: "spring", stiffness: 260, damping: 20 }}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
         href={`https://wa.me/5511999999999?text=${encodeURIComponent(
           "Olá! Gostaria de tirar algumas dúvidas sobre o casamento de Isadora e Wander."
         )}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-50 bg-[#25D366] hover:bg-[#20BA56] text-white p-4 rounded-full shadow-lg hover:shadow-xl transition duration-300 flex items-center justify-center cursor-pointer group"
+        className="fixed bottom-6 right-6 z-50 bg-[#25D366] hover:bg-[#20BA56] text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-editorial flex items-center justify-center cursor-pointer group"
         aria-label="Tirar dúvidas via WhatsApp"
       >
         <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-500 ease-in-out whitespace-nowrap text-[10px] font-semibold uppercase tracking-wider pl-0 group-hover:pl-2 group-hover:pr-2">

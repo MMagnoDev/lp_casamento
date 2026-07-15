@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Montserrat } from "next/font/google";
+import { Plus_Jakarta_Sans, Montserrat } from "next/font/google";
 import "./globals.css";
 import LenisProvider from "@/components/lenis-provider";
 
-const playfair = Playfair_Display({
+const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-serif",
-  weight: ["400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -37,9 +37,10 @@ export default function RootLayout({
   return (
     <html
       lang="pt-BR"
-      className={`${playfair.variable} ${montserrat.variable} antialiased`}
+      className={`${plusJakarta.variable} ${montserrat.variable} antialiased`}
     >
-      <body className="bg-[#FAF6F3] text-[#3C2D24]">
+      <body className="bg-[#FAF6F3] text-[#2A1E17]">
+        <div className="noise-overlay" />
         <LenisProvider>
           {children}
         </LenisProvider>
