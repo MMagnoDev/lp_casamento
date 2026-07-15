@@ -187,7 +187,7 @@ export default function Home() {
         <div className="relative z-10 max-w-5xl mx-auto px-6 text-left space-y-6 my-auto w-full">
 
           <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-light tracking-wide leading-[1.1] text-espresso max-w-4xl">
-            Vamos celebrar <br />
+            Vamos<br className="block md:hidden" /> celebrar <br />
             <span className="font-extralight italic text-primary">o amor</span>
           </h1>
 
