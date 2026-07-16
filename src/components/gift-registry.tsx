@@ -136,10 +136,16 @@ export default function GiftRegistry() {
   const [scrollLeftState, setScrollLeftState] = useState(0);
   const interactionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Floating point scroll accumulator to prevent browser integer truncation
+  const scrollAccumulatorRef = useRef(0);
+
   // continuous scroll loop (pauses on touch/drag/modal open)
   useEffect(() => {
     const container = containerRef.current;
     if (!container || selectedGift) return;
+
+    // Initialize accumulator to the current scroll value on start
+    scrollAccumulatorRef.current = container.scrollLeft;
 
     let animationFrameId: number;
     let lastTime = performance.now();
@@ -149,15 +155,23 @@ export default function GiftRegistry() {
       if (!isInteracting) {
         const delta = (time - lastTime) / 1000;
         const scrollAmount = speed * delta;
-        container.scrollLeft += scrollAmount;
+        
+        // Accumulate float
+        scrollAccumulatorRef.current += scrollAmount;
 
         const firstGroup = container.firstElementChild as HTMLElement;
         if (firstGroup) {
           const firstGroupWidth = firstGroup.clientWidth + 24; // width + gap
-          if (container.scrollLeft >= firstGroupWidth) {
-            container.scrollLeft -= firstGroupWidth;
+          if (scrollAccumulatorRef.current >= firstGroupWidth) {
+            scrollAccumulatorRef.current -= firstGroupWidth;
           }
         }
+
+        // Set rounded integer to native element to bypass subpixel truncation
+        container.scrollLeft = Math.round(scrollAccumulatorRef.current);
+      } else {
+        // Sync accumulator with user interaction
+        scrollAccumulatorRef.current = container.scrollLeft;
       }
       lastTime = time;
       animationFrameId = requestAnimationFrame(scrollLoop);
@@ -200,8 +214,13 @@ export default function GiftRegistry() {
 
     if (container.scrollLeft >= firstGroupWidth * 2 - container.clientWidth) {
       container.scrollLeft -= firstGroupWidth;
+      scrollAccumulatorRef.current = container.scrollLeft;
     } else if (container.scrollLeft <= 0) {
       container.scrollLeft += firstGroupWidth;
+      scrollAccumulatorRef.current = container.scrollLeft;
+    } else if (isInteracting) {
+      // Sync accumulator while user is scrolling/dragging
+      scrollAccumulatorRef.current = container.scrollLeft;
     }
   };
 
@@ -209,6 +228,9 @@ export default function GiftRegistry() {
     setIsInteracting(true);
     if (interactionTimeoutRef.current) {
       clearTimeout(interactionTimeoutRef.current);
+    }
+    if (containerRef.current) {
+      scrollAccumulatorRef.current = containerRef.current.scrollLeft;
     }
   };
 
@@ -218,6 +240,9 @@ export default function GiftRegistry() {
     }
     interactionTimeoutRef.current = setTimeout(() => {
       setIsInteracting(false);
+      if (containerRef.current) {
+        scrollAccumulatorRef.current = containerRef.current.scrollLeft;
+      }
     }, 300); // Resumes auto-scroll 300ms after user interaction ends
   };
 
@@ -231,6 +256,7 @@ export default function GiftRegistry() {
     startInteraction();
     setStartX(e.pageX - container.offsetLeft);
     setScrollLeftState(container.scrollLeft);
+    scrollAccumulatorRef.current = container.scrollLeft;
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -248,6 +274,7 @@ export default function GiftRegistry() {
     }
 
     container.scrollLeft = scrollLeftState - walk;
+    scrollAccumulatorRef.current = container.scrollLeft;
   };
 
   const handleMouseUpOrLeave = () => {
