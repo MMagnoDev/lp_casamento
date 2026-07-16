@@ -13,6 +13,7 @@ export default function Rsvp() {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [status, setStatus] = useState<"success" | "error" | null>(null);
+  const [whatsappLink, setWhatsappLink] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,7 +21,23 @@ export default function Rsvp() {
     if (attending === null) return;
 
     setLoading(true);
-    // Simular chamada de API
+
+    const attendanceText = attending ? "Sim, com certeza" : "Não poderei ir";
+    const companionsText = attending ? (companions === 0 ? "Nenhum acompanhante (Apenas eu)" : `${companions} acompanhante(s)`) : "N/A";
+    const noteText = note.trim() ? note.trim() : "Sem mensagem";
+
+    const message = `Olá! Confirmação de Presença - Casamento de Isadora e Wander:\n\n` +
+      `👤 Nome: ${name.trim()}\n` +
+      `💍 Confirmado? ${attendanceText}\n` +
+      (attending ? `👥 Acompanhantes: ${companionsText}\n` : "") +
+      `✉️ Mensagem: ${noteText}`;
+
+    const whatsappUrl = `https://wa.me/5537999351911?text=${encodeURIComponent(message)}`;
+    setWhatsappLink(whatsappUrl);
+    
+    // Abrir o WhatsApp
+    window.open(whatsappUrl, "_blank");
+
     setTimeout(() => {
       setLoading(false);
       setSubmitted(true);
@@ -33,7 +50,7 @@ export default function Rsvp() {
           colors: ["#8F6E56", "#5C6B5E", "#DCD0C0"],
         });
       }
-    }, 1200);
+    }, 1000);
   };
 
   return (
@@ -175,8 +192,18 @@ export default function Rsvp() {
             <div className="space-y-2">
               <h3 className="font-serif text-xl font-light text-espresso">Presença Confirmada!</h3>
               <p className="text-espresso/70 text-xs font-sans font-light leading-relaxed max-w-xs mx-auto">
-                Agradecemos por confirmar sua resposta. Nos vemos no dia 14 de Fevereiro de 2027!
+                Agradecemos por confirmar sua resposta. Caso a conversa do WhatsApp não tenha aberto, clique no botão abaixo para enviar os dados.
               </p>
+            </div>
+            <div className="pt-2">
+              <a
+                href={whatsappLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-[#25D366] hover:bg-[#20BA56] text-white px-6 py-3.5 rounded-full text-[10px] font-semibold uppercase tracking-widest transition shadow-md active:scale-95 inline-flex items-center gap-2"
+              >
+                <span>Enviar pelo WhatsApp</span>
+              </a>
             </div>
             <button
               onClick={() => {
@@ -185,6 +212,7 @@ export default function Rsvp() {
                 setNote("");
                 setAttending(null);
                 setStatus(null);
+                setWhatsappLink("");
               }}
               className="text-primary hover:text-[#7A5C46] text-[9px] tracking-widest uppercase font-semibold pt-4 block mx-auto transition-editorial cursor-pointer"
             >

@@ -11,7 +11,7 @@ interface TimeRemaining {
 }
 
 export default function Countdown() {
-  const targetDate = new Date("2027-02-14T17:00:00").getTime();
+  const targetDate = new Date("2026-10-16T20:30:00").getTime();
 
   const [timeLeft, setTimeLeft] = useState<TimeRemaining>({
     days: 0,

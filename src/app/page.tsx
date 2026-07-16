@@ -199,7 +199,7 @@ export default function Home() {
           </div>
 
           <p className="text-[10px] md:text-xs text-espresso/80 tracking-[0.25em] uppercase font-semibold">
-            14 de Fevereiro de 2027 &nbsp;•&nbsp; São Paulo/SP
+            16 de Outubro de 2026 &nbsp;•&nbsp; Santo Antônio do Monte/MG
           </p>
 
           <div className="pt-2 flex justify-start gap-4">
@@ -271,7 +271,7 @@ export default function Home() {
               />
             </div>
             <div className="px-1 text-center">
-              <span className="text-[8px] uppercase tracking-widest text-accent font-semibold">14.02.2027</span>
+              <span className="text-[8px] uppercase tracking-widest text-accent font-semibold">16.10.2026</span>
             </div>
           </div>
 
@@ -359,9 +359,11 @@ export default function Home() {
                   <Calendar size={20} />
                 </div>
                 <div className="space-y-1">
-                  <h4 className="font-serif text-base font-light text-espresso">Cerimônia e Recepção</h4>
+                  <h4 className="font-serif text-base font-light text-espresso">Cerimônia e Festa</h4>
                   <p className="text-espresso/70 text-xs font-sans font-light leading-relaxed">
-                    Domingo, 14 de Fevereiro de 2027, às 17:00.
+                    Sexta-feira, 16 de Outubro de 2026.<br />
+                    • Recepção dos Padrinhos: 20:00<br />
+                    • Início da Cerimônia: 20:30
                   </p>
                 </div>
               </div>
@@ -371,25 +373,48 @@ export default function Home() {
                   <MapPin size={20} />
                 </div>
                 <div className="space-y-1">
-                  <h4 className="font-serif text-base font-light text-espresso">Espaço Vila Mariana</h4>
+                  <h4 className="font-serif text-base font-light text-espresso">Cerimônia</h4>
                   <p className="text-espresso/70 text-xs font-sans font-light leading-relaxed">
-                    Rua Domingos de Morais, 2561 - Vila Mariana, São Paulo - SP.
+                    Av. Francisco Teotônio de Castro, 1059 - Santo Antônio do Monte - MG.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-5 items-start">
+                <div className="w-12 h-12 rounded-full border border-border/60 flex items-center justify-center text-primary bg-[#F5EFEB]/50 shrink-0">
+                  <MapPin size={20} />
+                </div>
+                <div className="space-y-1">
+                  <h4 className="font-serif text-base font-light text-espresso">Festa</h4>
+                  <p className="text-espresso/70 text-xs font-sans font-light leading-relaxed">
+                    Avenida Senador Eduardo Azevedo, 921 - Mãe Chiquinha, Santo Antônio do Monte - MG.
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="pt-6">
+            <div className="pt-6 flex flex-wrap gap-4">
               <motion.a
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                href="https://maps.google.com/?q=Rua+Domingos+de+Morais,+2561+-+Vila+Mariana,+S%C3%A3o+Paulo+-+SP"
+                href="https://maps.google.com/?q=Av.+Francisco+Teotonio+de+Castro,+1059+-+Santo+Antonio+do+Monte,+MG"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-primary hover:bg-[#7A5C46] text-[#FAF6F3] px-6 py-3.5 rounded-full text-[10px] font-semibold uppercase tracking-wider transition-editorial shadow-sm active:scale-95 cursor-pointer"
+                className="inline-flex items-center gap-2 bg-primary hover:bg-[#7A5C46] text-[#FAF6F3] px-5 py-3.5 rounded-full text-[10px] font-semibold uppercase tracking-wider transition-editorial shadow-sm active:scale-95 cursor-pointer"
               >
                 <MapPin size={14} />
-                <span>Abrir no Google Maps</span>
+                <span>Como ir para a Cerimônia</span>
+              </motion.a>
+              <motion.a
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                href="https://maps.google.com/?q=Avenida+senador+Eduardo+Azevedo,+921+-+Santo+Antonio+do+Monte,+MG"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 border border-primary text-primary hover:bg-primary/5 px-5 py-3.5 rounded-full text-[10px] font-semibold uppercase tracking-wider transition-editorial active:scale-95 cursor-pointer"
+              >
+                <MapPin size={14} />
+                <span>Como ir para a Festa</span>
               </motion.a>
             </div>
           </div>
@@ -404,10 +429,14 @@ export default function Home() {
             </h4>
             <div className="space-y-4 text-espresso/80 text-xs leading-relaxed font-sans font-light border-t border-border/20 pt-6">
               <p>
-                Para os convidados que vêm de fora de São Paulo, sugerimos o <strong className="font-medium text-espresso">Comfort Hotel Vila Mariana</strong>, localizado a apenas 5 minutos do evento.
+                Para os convidados que vêm de fora ou desejam se hospedar na cidade, sugerimos as seguintes opções de hotéis em Santo Antônio do Monte:
               </p>
-              <p>
-                Recomendamos o deslocamento por táxi ou carros de aplicativo. Para quem prefere transporte público, a estação de metrô Vila Mariana fica a 400 metros do local.
+              <ul className="space-y-2 list-disc list-inside">
+                <li><strong className="font-medium text-espresso">Hotel JR:</strong> (37) 3281-1066</li>
+                <li><strong className="font-medium text-espresso">Hotel Planalto:</strong> (37) 3281-1632</li>
+              </ul>
+              <p className="pt-2">
+                Recomendamos o deslocamento de carro, táxi ou carros de aplicativo para maior comodidade.
               </p>
             </div>
           </div>
@@ -487,7 +516,7 @@ export default function Home() {
           <div className="w-full lg:w-2/3 flex flex-col justify-between space-y-6 py-4">
             <div className="w-full h-full min-h-[400px] bg-[#FAF6F3] border border-border shadow-sm relative overflow-hidden">
               <iframe
-                src="https://maps.google.com/maps?q=R.%20Domingos%20de%20Morais,%202561%20-%20Vila%20Mariana,%20S%C3%A3o%20Paulo%20-%20SP&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                src="https://maps.google.com/maps?q=Av.%20Francisco%20Teot%C3%B4nio%20de%20Castro,%201059%20-%20Santo%20Ant%C3%B4nio%20do%20Monte,%20MG,%2035560-000&t=&z=16&ie=UTF8&iwloc=&output=embed"
                 width="100%"
                 height="100%"
                 style={{ border: 0, minHeight: "450px" }}
@@ -498,16 +527,16 @@ export default function Home() {
               />
             </div>
             <div className="flex flex-col sm:flex-row justify-between items-center text-center sm:text-left px-6 gap-4">
-              <div>
-                <h4 className="font-serif text-base font-light text-espresso">Espaço Vila Mariana</h4>
+              <div className="space-y-1">
+                <h4 className="font-serif text-sm font-semibold text-espresso">Localização da Cerimônia</h4>
                 <p className="text-espresso/70 text-xs font-sans font-light">
-                  Rua Domingos de Morais, 2561 - Vila Mariana, São Paulo - SP
+                  Av. Francisco Teotônio de Castro, 1059 - Santo Antônio do Monte - MG
                 </p>
               </div>
               <motion.a
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                href="https://maps.google.com/?q=Rua+Domingos+de+Morais,+2561+-+Vila+Mariana,+S%C3%A3o+Paulo+-+SP"
+                href="https://maps.google.com/?q=Av.+Francisco+Teotonio+de+Castro,+1059+-+Santo+Antonio+do+Monte,+MG"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-[#8F6E56] hover:bg-[#7A5C46] text-[#FAF6F3] px-6 py-3 rounded-full text-[10px] font-semibold tracking-wider uppercase transition-editorial shadow-sm active:scale-95 cursor-pointer"
@@ -546,8 +575,8 @@ export default function Home() {
               </div>
             </div>
 
-            <p className="text-espresso/80 text-xs leading-relaxed font-sans font-light text-center lg:text-left">
-              Ficamos muito felizes em ter vocês como nossos padrinhos e madrinhas! Preparamos este pequeno guia sobre trajes e horários para auxiliá-los.
+            <p className="text-espresso/80 text-xs leading-relaxed font-sans font-light text-center lg:text-left max-w-2xl">
+              Queridos padrinhos e madrinhas, vocês fazem parte da nossa história e não poderíamos viver esse momento tão especial sem a presença de vocês ao nosso lado.
             </p>
           </div>
           <GodparentsManual />
@@ -581,7 +610,7 @@ export default function Home() {
             </div>
 
             <p className="text-espresso/80 text-xs leading-relaxed font-sans font-light text-center lg:text-left max-w-sm mx-auto lg:mx-0">
-              Por favor, confirme sua presença até o dia <strong className="font-medium text-espresso">15 de Janeiro de 2027</strong>. É muito importante para nós podermos planejar tudo perfeitamente.
+              Por favor, confirme sua presença até o dia <strong className="font-medium text-espresso">16 de Setembro de 2026</strong>. É muito importante para nós podermos planejar tudo perfeitamente.
             </p>
           </div>
           <div className="lg:col-span-1">
@@ -599,10 +628,10 @@ export default function Home() {
               alt="Isadora & Wander Logo"
               className="h-10 md:h-12 w-auto object-contain mx-auto md:mx-0 opacity-90 hover:opacity-100 transition-editorial"
             />
-            <p className="text-[#8F6E56] text-[9px] tracking-[0.25em] uppercase font-sans font-semibold">14 de Fevereiro de 2027</p>
+            <p className="text-[#8F6E56] text-[9px] tracking-[0.25em] uppercase font-sans font-semibold">16 de Outubro de 2026</p>
           </div>
           <div className="text-espresso/60 text-[9px] uppercase tracking-widest font-semibold">
-            © 2027 Isadora & Wander. Todos os direitos reservados.
+            © 2026 Isadora & Wander. Todos os direitos reservados.
           </div>
         </div>
       </footer>
@@ -614,7 +643,7 @@ export default function Home() {
         transition={{ delay: 1.5, type: "spring", stiffness: 260, damping: 20 }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        href={`https://wa.me/5511999999999?text=${encodeURIComponent(
+        href={`https://wa.me/5537999351911?text=${encodeURIComponent(
           "Olá! Gostaria de tirar algumas dúvidas sobre o casamento de Isadora e Wander."
         )}`}
         target="_blank"

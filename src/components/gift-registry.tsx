@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Gift, Copy, Check, X, CaretLeft, CaretRight, WhatsappLogo } from "@phosphor-icons/react";
 
-const WHATSAPP_PHONE = "5511999999999"; // Substitua pelo número de telefone do casal (com DDI + DDD, apenas números)
+const WHATSAPP_PHONE = "5537999351911"; // Substitua pelo número de telefone do casal (com DDI + DDD, apenas números)
 
 
 interface GiftItem {
@@ -67,6 +67,58 @@ const INITIAL_GIFTS: GiftItem[] = [
   },
 ];
 
+function GiftCard({ 
+  gift, 
+  onSelect, 
+  className = "" 
+}: { 
+  gift: GiftItem; 
+  onSelect: (gift: GiftItem) => void; 
+  className?: string;
+}) {
+  return (
+    <div
+      className={`shrink-0 bg-[#FAF6F3] border border-border p-4 flex flex-col justify-between space-y-4 transition-editorial hover:shadow-md group ${className}`}
+    >
+      <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#F5EFEB] border border-border/10">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={gift.imageUrl}
+          alt={gift.name}
+          className="w-full h-full object-cover transition-editorial group-hover:scale-105"
+        />
+        <div className="absolute top-3 left-3 bg-[#FAF6F3]/90 backdrop-blur-sm border border-white/20 px-3 py-1 rounded-full shadow-sm">
+          <span className="text-[8px] uppercase tracking-widest text-[#8F6E56] font-semibold block">
+            {gift.category}
+          </span>
+        </div>
+      </div>
+      
+      <div className="space-y-1 px-1">
+        <h4 className="font-serif text-base font-light text-espresso tracking-wide line-clamp-1">
+          {gift.name}
+        </h4>
+        <p className="text-[#8F6E56] text-xs font-semibold mt-1 font-sans">
+          R$ {gift.price.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+        </p>
+      </div>
+
+      <button
+        disabled={gift.reserved}
+        onClick={() => onSelect(gift)}
+        className={`w-full py-3 text-[9px] uppercase tracking-[0.2em] font-semibold transition-editorial flex items-center justify-center gap-2 rounded-full border ${
+          gift.reserved
+            ? "bg-transparent border border-border text-primary/45 cursor-not-allowed"
+            : "bg-[#8F6E56] hover:bg-[#7A5C46] text-[#FAF6F3] border-transparent shadow-sm cursor-pointer hover:shadow-md active:scale-[0.98]"
+        }`}
+      >
+        <Gift size={12} />
+        <span>{gift.reserved ? "Presenteado" : "Presentear"}</span>
+      </button>
+    </div>
+  );
+}
+
 export default function GiftRegistry() {
   const [gifts, setGifts] = useState<GiftItem[]>(INITIAL_GIFTS);
   const [selectedGift, setSelectedGift] = useState<GiftItem | null>(null);
@@ -75,6 +127,12 @@ export default function GiftRegistry() {
   const [isHovered, setIsHovered] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Mobile scroll & touch tracking refs
+  const mobileContainerRef = useRef<HTMLDivElement>(null);
+  const [isMobileInteracting, setIsMobileInteracting] = useState(false);
+  const mobileInteractionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Desktop automatic scroll timer
   useEffect(() => {
     if (isHovered || selectedGift) return;
 
@@ -95,6 +153,76 @@ export default function GiftRegistry() {
     return () => clearInterval(timer);
   }, [isHovered, selectedGift, gifts.length]);
 
+  // Mobile continuous scroll loop (ultra-smooth and pauses on touch/drag/modal)
+  useEffect(() => {
+    const container = mobileContainerRef.current;
+    if (!container || selectedGift) return;
+
+    let animationFrameId: number;
+    let lastTime = performance.now();
+    const speed = 35; // Pixels per second
+
+    const scrollLoop = (time: number) => {
+      if (!isMobileInteracting) {
+        const delta = (time - lastTime) / 1000;
+        const scrollAmount = speed * delta;
+        container.scrollLeft += scrollAmount;
+
+        const firstGroup = container.firstElementChild as HTMLElement;
+        if (firstGroup) {
+          const firstGroupWidth = firstGroup.clientWidth + 24; // width + gap
+          if (container.scrollLeft >= firstGroupWidth) {
+            container.scrollLeft -= firstGroupWidth;
+          }
+        }
+      }
+      lastTime = time;
+      animationFrameId = requestAnimationFrame(scrollLoop);
+    };
+
+    animationFrameId = requestAnimationFrame(scrollLoop);
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      if (mobileInteractionTimeoutRef.current) {
+        clearTimeout(mobileInteractionTimeoutRef.current);
+      }
+    };
+  }, [isMobileInteracting, selectedGift, gifts.length]);
+
+  // Handles manual scroll wrapping in both directions on mobile
+  const handleMobileScroll = () => {
+    const container = mobileContainerRef.current;
+    if (!container) return;
+
+    const firstGroup = container.firstElementChild as HTMLElement;
+    if (!firstGroup) return;
+
+    const firstGroupWidth = firstGroup.clientWidth + 24;
+
+    if (container.scrollLeft >= firstGroupWidth * 2 - container.clientWidth) {
+      container.scrollLeft -= firstGroupWidth;
+    } else if (container.scrollLeft <= 0) {
+      container.scrollLeft += firstGroupWidth;
+    }
+  };
+
+  const startMobileInteraction = () => {
+    setIsMobileInteracting(true);
+    if (mobileInteractionTimeoutRef.current) {
+      clearTimeout(mobileInteractionTimeoutRef.current);
+    }
+  };
+
+  const endMobileInteraction = () => {
+    if (mobileInteractionTimeoutRef.current) {
+      clearTimeout(mobileInteractionTimeoutRef.current);
+    }
+    mobileInteractionTimeoutRef.current = setTimeout(() => {
+      setIsMobileInteracting(false);
+    }, 300); // Resumes auto-scroll 300ms after user interaction ends
+  };
+
   const scroll = (direction: "left" | "right") => {
     if (containerRef.current) {
       const cardWidth = containerRef.current.firstElementChild?.clientWidth || 0;
@@ -105,7 +233,7 @@ export default function GiftRegistry() {
   };
 
   const handleCopyPix = () => {
-    navigator.clipboard.writeText("isadoraewander@pix.com");
+    navigator.clipboard.writeText("37999351911");
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -123,57 +251,60 @@ export default function GiftRegistry() {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
+      {/* Mobile view: continuous scroll marquee with touch swipe support */}
+      <div className="block md:hidden relative w-full overflow-hidden py-2">
+        <div 
+          ref={mobileContainerRef}
+          onScroll={handleMobileScroll}
+          onTouchStart={startMobileInteraction}
+          onTouchEnd={endMobileInteraction}
+          onMouseDown={startMobileInteraction}
+          onMouseUp={endMobileInteraction}
+          onMouseLeave={endMobileInteraction}
+          className="flex gap-6 overflow-x-auto scrollbar-none snap-none select-none active:cursor-grabbing"
+          style={{ WebkitOverflowScrolling: "touch" }}
+        >
+          <div className="flex gap-6 shrink-0">
+            {gifts.map((gift) => (
+              <GiftCard 
+                key={`mobile-1-${gift.id}`} 
+                gift={gift} 
+                onSelect={setSelectedGift} 
+                className="w-[260px]"
+              />
+            ))}
+          </div>
+          <div className="flex gap-6 shrink-0" aria-hidden="true">
+            {gifts.map((gift) => (
+              <GiftCard 
+                key={`mobile-2-${gift.id}`} 
+                gift={gift} 
+                onSelect={setSelectedGift} 
+                className="w-[260px]"
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Desktop view: standard snapping carousel with buttons */}
       <div 
         ref={containerRef}
-        className="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-none pb-4"
+        className="hidden md:flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-none pb-4"
       >
         {gifts.map((gift) => (
-          <div
-            key={gift.id}
-            className="w-full sm:w-[calc(50%-12px)] shrink-0 snap-start bg-[#FAF6F3] border border-border p-4 flex flex-col justify-between space-y-4 transition-editorial hover:shadow-md group"
-          >
-            <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#F5EFEB] border border-border/10">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={gift.imageUrl}
-                alt={gift.name}
-                className="w-full h-full object-cover transition-editorial group-hover:scale-105"
-              />
-              <div className="absolute top-3 left-3 bg-[#FAF6F3]/90 backdrop-blur-sm border border-white/20 px-3 py-1 rounded-full shadow-sm">
-                <span className="text-[8px] uppercase tracking-widest text-[#8F6E56] font-semibold block">
-                  {gift.category}
-                </span>
-              </div>
-            </div>
-            
-            <div className="space-y-1 px-1">
-              <h4 className="font-serif text-base font-light text-espresso tracking-wide line-clamp-1">
-                {gift.name}
-              </h4>
-              <p className="text-[#8F6E56] text-xs font-semibold mt-1 font-sans">
-                R$ {gift.price.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
-              </p>
-            </div>
-
-            <button
-              disabled={gift.reserved}
-              onClick={() => setSelectedGift(gift)}
-              className={`w-full py-3 text-[9px] uppercase tracking-[0.2em] font-semibold transition-editorial flex items-center justify-center gap-2 rounded-full border ${
-                gift.reserved
-                  ? "bg-transparent border border-border text-primary/45 cursor-not-allowed"
-                  : "bg-[#8F6E56] hover:bg-[#7A5C46] text-[#FAF6F3] border-transparent shadow-sm cursor-pointer hover:shadow-md active:scale-[0.98]"
-              }`}
-            >
-              <Gift size={12} />
-              <span>{gift.reserved ? "Presenteado" : "Presentear"}</span>
-            </button>
-          </div>
+          <GiftCard 
+            key={`desktop-${gift.id}`} 
+            gift={gift} 
+            onSelect={setSelectedGift} 
+            className="w-full md:w-[calc(50%-12px)] snap-start"
+          />
         ))}
       </div>
 
       <div className="flex justify-between items-center max-w-lg mx-auto gap-4">
-        {/* Navigation buttons */}
-        <div className="flex gap-2">
+        {/* Navigation buttons: only shown on desktop */}
+        <div className="hidden md:flex gap-2">
           <button 
             onClick={() => scroll("left")}
             className="w-10 h-10 border border-border/60 rounded-full flex items-center justify-center text-primary bg-[#FAF6F3]/50 hover:bg-[#FAF6F3] hover:border-primary/50 transition-editorial cursor-pointer active:scale-95 shadow-sm"
@@ -190,7 +321,7 @@ export default function GiftRegistry() {
           </button>
         </div>
 
-        <div className="text-right border-l border-border/40 pl-4">
+        <div className="text-center md:text-right border-l border-border/40 pl-4 w-full md:w-auto">
           <p className="text-[#8F6E56] text-[9px] uppercase tracking-wider font-semibold italic">
             “Os presentes são simbólicos e os valores revertidos ao casal.”
           </p>
@@ -269,7 +400,7 @@ export default function GiftRegistry() {
 
                   <div className="bg-[#F5EFEB]/80 p-5 rounded-[1.5rem] border border-border/80 space-y-4 text-left shadow-[inset_0_1px_2px_rgba(60,45,36,0.02)]">
                     <div className="flex justify-between items-center text-xs">
-                      <span className="text-espresso/70 font-semibold text-[10px] uppercase tracking-wider">Chave PIX (E-mail):</span>
+                      <span className="text-espresso/70 font-semibold text-[10px] uppercase tracking-wider">Chave PIX Celular (PicPay):</span>
                       <button
                         onClick={handleCopyPix}
                         className="text-primary hover:text-primary-hover flex items-center gap-1.5 font-semibold transition-editorial cursor-pointer"
@@ -278,8 +409,11 @@ export default function GiftRegistry() {
                         <span className="text-[9px] uppercase tracking-widest">{copied ? "Copiado!" : "Copiar"}</span>
                       </button>
                     </div>
-                    <p className="font-mono text-xs text-espresso select-all break-all bg-[#FAF6F3] p-3 rounded-xl border border-border/50 text-center font-semibold">
-                      isadoraewander@pix.com
+                    <p className="font-mono text-sm text-espresso select-all break-all bg-[#FAF6F3] p-3 rounded-xl border border-border/50 text-center font-semibold tracking-wider">
+                      3799935-1911
+                    </p>
+                    <p className="text-[9px] text-espresso/60 text-center mt-1">
+                      Beneficiário: <strong className="font-medium text-espresso">Wander Ricardo Santos</strong>
                     </p>
                     <div className="flex justify-between items-center text-xs pt-3.5 border-t border-border/30">
                       <span className="text-espresso/70 font-semibold text-[10px] uppercase tracking-wider">Valor total sugerido:</span>
