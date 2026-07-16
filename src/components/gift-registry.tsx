@@ -80,12 +80,13 @@ function GiftCard({
     <div
       className={`shrink-0 bg-[#FAF6F3] border border-border p-4 flex flex-col justify-between space-y-4 transition-editorial hover:shadow-md group ${className}`}
     >
-      <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#F5EFEB] border border-border/10">
+      <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#F5EFEB] border border-border/10 select-none">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={gift.imageUrl}
           alt={gift.name}
-          className="w-full h-full object-cover transition-editorial group-hover:scale-105"
+          draggable={false}
+          className="w-full h-full object-cover transition-editorial group-hover:scale-105 select-none"
         />
         <div className="absolute top-3 left-3 bg-[#FAF6F3]/90 backdrop-blur-sm border border-white/20 px-3 py-1 rounded-full shadow-sm">
           <span className="text-[8px] uppercase tracking-widest text-[#8F6E56] font-semibold block">
@@ -125,37 +126,19 @@ export default function GiftRegistry() {
   const [copied, setCopied] = useState(false);
   const [showPixDetails, setShowPixDetails] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  
+  // Unified ref & interaction state
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isInteracting, setIsInteracting] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragged, setDragged] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeftState, setScrollLeftState] = useState(0);
+  const interactionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Mobile scroll & touch tracking refs
-  const mobileContainerRef = useRef<HTMLDivElement>(null);
-  const [isMobileInteracting, setIsMobileInteracting] = useState(false);
-  const mobileInteractionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Desktop automatic scroll timer
+  // continuous scroll loop (pauses on touch/drag/modal open)
   useEffect(() => {
-    if (isHovered || selectedGift) return;
-
-    const timer = setInterval(() => {
-      if (containerRef.current) {
-        const cardWidth = containerRef.current.firstElementChild?.clientWidth || 0;
-        const gap = 24; // gap-6
-        const maxScrollLeft = containerRef.current.scrollWidth - containerRef.current.clientWidth;
-
-        if (containerRef.current.scrollLeft >= maxScrollLeft - 10) {
-          containerRef.current.scrollTo({ left: 0, behavior: "smooth" });
-        } else {
-          containerRef.current.scrollBy({ left: cardWidth + gap, behavior: "smooth" });
-        }
-      }
-    }, 4000); // Transitions automatically every 4 seconds
-
-    return () => clearInterval(timer);
-  }, [isHovered, selectedGift, gifts.length]);
-
-  // Mobile continuous scroll loop (ultra-smooth and pauses on touch/drag/modal)
-  useEffect(() => {
-    const container = mobileContainerRef.current;
+    const container = containerRef.current;
     if (!container || selectedGift) return;
 
     let animationFrameId: number;
@@ -163,7 +146,7 @@ export default function GiftRegistry() {
     const speed = 35; // Pixels per second
 
     const scrollLoop = (time: number) => {
-      if (!isMobileInteracting) {
+      if (!isInteracting) {
         const delta = (time - lastTime) / 1000;
         const scrollAmount = speed * delta;
         container.scrollLeft += scrollAmount;
@@ -184,15 +167,30 @@ export default function GiftRegistry() {
 
     return () => {
       cancelAnimationFrame(animationFrameId);
-      if (mobileInteractionTimeoutRef.current) {
-        clearTimeout(mobileInteractionTimeoutRef.current);
+      if (interactionTimeoutRef.current) {
+        clearTimeout(interactionTimeoutRef.current);
       }
     };
-  }, [isMobileInteracting, selectedGift, gifts.length]);
+  }, [isInteracting, selectedGift, gifts.length]);
 
-  // Handles manual scroll wrapping in both directions on mobile
-  const handleMobileScroll = () => {
-    const container = mobileContainerRef.current;
+  // Global window listener to release drag state anywhere on mouseup
+  useEffect(() => {
+    if (!isDragging) return;
+
+    const handleGlobalMouseUp = () => {
+      setIsDragging(false);
+      endInteraction();
+    };
+
+    window.addEventListener("mouseup", handleGlobalMouseUp);
+    return () => {
+      window.removeEventListener("mouseup", handleGlobalMouseUp);
+    };
+  }, [isDragging]);
+
+  // Handles manual scroll wrapping in both directions
+  const handleScroll = () => {
+    const container = containerRef.current;
     if (!container) return;
 
     const firstGroup = container.firstElementChild as HTMLElement;
@@ -207,28 +205,63 @@ export default function GiftRegistry() {
     }
   };
 
-  const startMobileInteraction = () => {
-    setIsMobileInteracting(true);
-    if (mobileInteractionTimeoutRef.current) {
-      clearTimeout(mobileInteractionTimeoutRef.current);
+  const startInteraction = () => {
+    setIsInteracting(true);
+    if (interactionTimeoutRef.current) {
+      clearTimeout(interactionTimeoutRef.current);
     }
   };
 
-  const endMobileInteraction = () => {
-    if (mobileInteractionTimeoutRef.current) {
-      clearTimeout(mobileInteractionTimeoutRef.current);
+  const endInteraction = () => {
+    if (interactionTimeoutRef.current) {
+      clearTimeout(interactionTimeoutRef.current);
     }
-    mobileInteractionTimeoutRef.current = setTimeout(() => {
-      setIsMobileInteracting(false);
+    interactionTimeoutRef.current = setTimeout(() => {
+      setIsInteracting(false);
     }, 300); // Resumes auto-scroll 300ms after user interaction ends
   };
 
-  const scroll = (direction: "left" | "right") => {
-    if (containerRef.current) {
-      const cardWidth = containerRef.current.firstElementChild?.clientWidth || 0;
-      const gap = 24; // gap-6
-      const scrollAmount = direction === "left" ? -(cardWidth + gap) : (cardWidth + gap);
-      containerRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
+  // Desktop Mouse Drag Scroll Handlers
+  const handleMouseDown = (e: React.MouseEvent) => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    setIsDragging(true);
+    setDragged(false); // Reset drag state on click
+    startInteraction();
+    setStartX(e.pageX - container.offsetLeft);
+    setScrollLeftState(container.scrollLeft);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+    e.preventDefault();
+
+    const container = containerRef.current;
+    if (!container) return;
+
+    const x = e.pageX - container.offsetLeft;
+    const walk = (x - startX) * 1.5; // multiplier for drag sensitivity
+
+    if (Math.abs(walk) > 5) {
+      setDragged(true); // Drag occurred
+    }
+
+    container.scrollLeft = scrollLeftState - walk;
+  };
+
+  const handleMouseUpOrLeave = () => {
+    if (isDragging) {
+      setIsDragging(false);
+      endInteraction();
+    }
+  };
+
+  // Prevent clicking on cards when dragging
+  const handleClickCapture = (e: React.MouseEvent) => {
+    if (dragged) {
+      e.preventDefault();
+      e.stopPropagation();
     }
   };
 
@@ -251,77 +284,48 @@ export default function GiftRegistry() {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Mobile view: continuous scroll marquee with touch swipe support */}
-      <div className="block md:hidden relative w-full overflow-hidden py-2">
+      {/* Unified Infinite Scroll Carousel (Mobile & Desktop) */}
+      <div className="relative w-full overflow-hidden py-2 select-none">
         <div 
-          ref={mobileContainerRef}
-          onScroll={handleMobileScroll}
-          onTouchStart={startMobileInteraction}
-          onTouchEnd={endMobileInteraction}
-          onMouseDown={startMobileInteraction}
-          onMouseUp={endMobileInteraction}
-          onMouseLeave={endMobileInteraction}
-          className="flex gap-6 overflow-x-auto scrollbar-none snap-none select-none active:cursor-grabbing"
+          ref={containerRef}
+          onScroll={handleScroll}
+          onTouchStart={startInteraction}
+          onTouchEnd={endInteraction}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUpOrLeave}
+          onMouseLeave={handleMouseUpOrLeave}
+          onClickCapture={handleClickCapture}
+          className="flex gap-6 overflow-x-auto scrollbar-none snap-none cursor-grab active:cursor-grabbing"
           style={{ WebkitOverflowScrolling: "touch" }}
         >
+          {/* Group 1 */}
           <div className="flex gap-6 shrink-0">
             {gifts.map((gift) => (
               <GiftCard 
-                key={`mobile-1-${gift.id}`} 
+                key={`g1-${gift.id}`} 
                 gift={gift} 
                 onSelect={setSelectedGift} 
-                className="w-[260px]"
+                className="w-[260px] md:w-[320px]"
               />
             ))}
           </div>
+          {/* Group 2 */}
           <div className="flex gap-6 shrink-0" aria-hidden="true">
             {gifts.map((gift) => (
               <GiftCard 
-                key={`mobile-2-${gift.id}`} 
+                key={`g2-${gift.id}`} 
                 gift={gift} 
                 onSelect={setSelectedGift} 
-                className="w-[260px]"
+                className="w-[260px] md:w-[320px]"
               />
             ))}
           </div>
         </div>
       </div>
 
-      {/* Desktop view: standard snapping carousel with buttons */}
-      <div 
-        ref={containerRef}
-        className="hidden md:flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-none pb-4"
-      >
-        {gifts.map((gift) => (
-          <GiftCard 
-            key={`desktop-${gift.id}`} 
-            gift={gift} 
-            onSelect={setSelectedGift} 
-            className="w-full md:w-[calc(50%-12px)] snap-start"
-          />
-        ))}
-      </div>
-
-      <div className="flex justify-between items-center max-w-lg mx-auto gap-4">
-        {/* Navigation buttons: only shown on desktop */}
-        <div className="hidden md:flex gap-2">
-          <button 
-            onClick={() => scroll("left")}
-            className="w-10 h-10 border border-border/60 rounded-full flex items-center justify-center text-primary bg-[#FAF6F3]/50 hover:bg-[#FAF6F3] hover:border-primary/50 transition-editorial cursor-pointer active:scale-95 shadow-sm"
-            aria-label="Anterior"
-          >
-            <CaretLeft size={16} />
-          </button>
-          <button 
-            onClick={() => scroll("right")}
-            className="w-10 h-10 border border-border/60 rounded-full flex items-center justify-center text-primary bg-[#FAF6F3]/50 hover:bg-[#FAF6F3] hover:border-primary/50 transition-editorial cursor-pointer active:scale-95 shadow-sm"
-            aria-label="Próximo"
-          >
-            <CaretRight size={16} />
-          </button>
-        </div>
-
-        <div className="text-center md:text-right border-l border-border/40 pl-4 w-full md:w-auto">
+      <div className="flex justify-center items-center max-w-lg mx-auto gap-4">
+        <div className="text-center pl-4 w-full">
           <p className="text-[#8F6E56] text-[9px] uppercase tracking-wider font-semibold italic">
             “Os presentes são simbólicos e os valores revertidos ao casal.”
           </p>
