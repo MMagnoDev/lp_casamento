@@ -445,81 +445,40 @@ export default function Home() {
 
       {/* 5. Como Chegar / Local do Evento */}
       <FadeInSection id="local" className="bg-[#F2ECE6]/50 border-y border-border/60">
-        <div className="flex flex-col lg:flex-row-reverse gap-12 items-stretch px-4 md:px-12 lg:px-20">
-          {/* Right column (1/3 width) - Title and directions info */}
-          <div className="w-full lg:w-1/3 flex flex-col justify-between space-y-8 text-center lg:text-right items-center lg:items-end py-4">
-            <div className="space-y-6 w-full">
-              <div className="flex justify-center lg:justify-end">
-                <svg className="w-16 h-6 text-[#8F6E56]/60" viewBox="0 0 100 30" fill="currentColor">
-                  <path d="M50,20 C42,15 28,10 15,17 C28,8 42,12 50,20 Z" />
-                  <path d="M50,20 C58,15 72,10 85,17 C72,8 58,12 50,20 Z" />
-                  <path d="M50,7 C50,7 48.5,5 47,5 C45,5 44,6.5 44,8 C44,11 47.5,13 50,15 C52.5,13 56,11 56,8 C56,6.5 55,5 53,5 C51.5,5 50,7 50,7 Z" />
-                </svg>
-              </div>
-
-              <div className="space-y-4 w-full">
-                <span className="text-[8px] uppercase tracking-widest text-[#8F6E56] font-semibold block">Local do Casamento</span>
-                <h2 className="font-serif text-4xl md:text-6xl text-espresso font-light tracking-wide leading-[1.1]">
-                  Como <br /> <span className="italic text-primary">Chegar</span>
-                </h2>
-
-                <div className="flex justify-center lg:justify-end items-center py-1 text-border">
-                  <svg className="w-28 h-3" viewBox="0 0 120 10" fill="none" stroke="currentColor" strokeWidth="1">
-                    <path d="M0,5 L50,5 C52,5 54,3 56,3 C58,3 59,5 60,5 C61,5 62,7 64,7 C66,7 68,5 70,5 L120,5" />
-                    <circle cx="60" cy="5" r="1.5" fill="currentColor" />
-                  </svg>
-                </div>
-              </div>
+        <div className="space-y-12 px-4 md:px-12 lg:px-20 w-full flex flex-col items-center">
+          {/* Title block */}
+          <div className="text-center w-full space-y-4 mb-4 flex flex-col items-center">
+            <div className="flex justify-center w-full">
+              <svg className="w-16 h-6 text-[#8F6E56]/60" viewBox="0 0 100 30" fill="currentColor">
+                <path d="M50,20 C42,15 28,10 15,17 C28,8 42,12 50,20 Z" />
+                <path d="M50,20 C58,15 72,10 85,17 C72,8 58,12 50,20 Z" />
+                <path d="M50,7 C50,7 48.5,5 47,5 C45,5 44,6.5 44,8 C44,11 47.5,13 50,15 C52.5,13 56,11 56,8 C56,6.5 55,5 53,5 C51.5,5 50,7 50,7 Z" />
+              </svg>
             </div>
 
-            {/* Directions details card - Single Bezel */}
-            <div className="w-full bg-[#FAF6F3] border border-border p-6 space-y-5 text-left transition-editorial hover:shadow-md">
-              <div className="flex gap-4 items-start">
-                <div className="w-9 h-9 rounded-full border border-border/60 flex items-center justify-center text-primary bg-[#F5EFEB]/50 shrink-0">
-                  <Car size={16} />
-                </div>
-                <div className="space-y-0.5">
-                  <h4 className="font-serif text-sm font-medium text-espresso">De Carro</h4>
-                  <p className="text-espresso/70 text-xs font-sans font-light leading-relaxed">
-                    O local possui serviço de valet na porta e estacionamento conveniado próximo.
-                  </p>
-                </div>
-              </div>
+            <div className="space-y-4 w-full">
+              <span className="text-[8px] uppercase tracking-widest text-[#8F6E56] font-semibold block">Local do Casamento</span>
+              <h2 className="font-serif text-4xl md:text-6xl text-espresso font-light tracking-wide leading-[1.1]">
+                Como <br /> <span className="italic text-primary">Chegar</span>
+              </h2>
 
-              <div className="flex gap-4 items-start">
-                <div className="w-9 h-9 rounded-full border border-border/60 flex items-center justify-center text-primary bg-[#F5EFEB]/50 shrink-0">
-                  <Train size={16} />
-                </div>
-                <div className="space-y-0.5">
-                  <h4 className="font-serif text-sm font-medium text-espresso">De Metrô</h4>
-                  <p className="text-espresso/70 text-xs font-sans font-light leading-relaxed">
-                    A estação <strong className="font-medium text-espresso">Vila Mariana</strong> (Linha 1 - Azul) fica a apenas 400m.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-4 items-start">
-                <div className="w-9 h-9 rounded-full border border-border/60 flex items-center justify-center text-primary bg-[#F5EFEB]/50 shrink-0">
-                  <DeviceMobile size={16} />
-                </div>
-                <div className="space-y-0.5">
-                  <h4 className="font-serif text-sm font-medium text-espresso">De Aplicativo</h4>
-                  <p className="text-espresso/70 text-xs font-sans font-light leading-relaxed">
-                    Insira o endereço <strong className="font-medium text-espresso">Rua Domingos de Morais, 2561</strong> no app de preferência.
-                  </p>
-                </div>
+              <div className="flex justify-center items-center py-1 text-border w-full">
+                <svg className="w-28 h-3" viewBox="0 0 120 10" fill="none" stroke="currentColor" strokeWidth="1">
+                  <path d="M0,5 L50,5 C52,5 54,3 56,3 C58,3 59,5 60,5 C61,5 62,7 64,7 C66,7 68,5 70,5 L120,5" />
+                  <circle cx="60" cy="5" r="1.5" fill="currentColor" />
+                </svg>
               </div>
             </div>
           </div>
 
-          {/* Left column (2/3 width) - Google Map - Inside Single Bezel */}
-          <div className="w-full lg:w-2/3 flex flex-col justify-between space-y-6 py-4">
-            <div className="w-full h-full min-h-[400px] bg-[#FAF6F3] border border-border shadow-sm relative overflow-hidden">
+          {/* Map and address card */}
+          <div className="w-full max-w-4xl mx-auto flex flex-col justify-between space-y-6">
+            <div className="w-full h-[400px] bg-[#FAF6F3] border border-border shadow-sm relative overflow-hidden">
               <iframe
                 src="https://maps.google.com/maps?q=Av.%20Francisco%20Teot%C3%B4nio%20de%20Castro,%201059%20-%20Santo%20Ant%C3%B4nio%20do%20Monte,%20MG,%2035560-000&t=&z=16&ie=UTF8&iwloc=&output=embed"
                 width="100%"
                 height="100%"
-                style={{ border: 0, minHeight: "450px" }}
+                style={{ border: 0, minHeight: "400px" }}
                 allowFullScreen={true}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
