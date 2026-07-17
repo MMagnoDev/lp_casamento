@@ -119,7 +119,7 @@ export default function GodparentsManual() {
         
         <div className="pt-4 border-t border-border/30">
           <p className="text-[10px] text-espresso font-semibold font-sans">
-            Noivos: (37) 99935-1911
+            Noivos: (37) 9911-3057
           </p>
         </div>
       </div>

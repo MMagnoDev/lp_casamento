@@ -602,7 +602,7 @@ export default function Home() {
         transition={{ delay: 1.5, type: "spring", stiffness: 260, damping: 20 }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        href={`https://wa.me/5537999351911?text=${encodeURIComponent(
+        href={`https://wa.me/553799113057?text=${encodeURIComponent(
           "Olá! Gostaria de tirar algumas dúvidas sobre o casamento de Isadora e Wander."
         )}`}
         target="_blank"

@@ -32,7 +32,7 @@ export default function Rsvp() {
       (attending ? `👥 Acompanhantes: ${companionsText}\n` : "") +
       `✉️ Mensagem: ${noteText}`;
 
-    const whatsappUrl = `https://wa.me/5537999351911?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/553799113057?text=${encodeURIComponent(message)}`;
     setWhatsappLink(whatsappUrl);
     
     // Abrir o WhatsApp

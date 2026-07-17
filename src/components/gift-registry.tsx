@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Gift, Copy, Check, X, CaretLeft, CaretRight, WhatsappLogo } from "@phosphor-icons/react";
 
-const WHATSAPP_PHONE = "5537999351911"; // Substitua pelo número de telefone do casal (com DDI + DDD, apenas números)
+const WHATSAPP_PHONE = "553799113057"; // Substitua pelo número de telefone do casal (com DDI + DDD, apenas números)
 
 
 interface GiftItem {
