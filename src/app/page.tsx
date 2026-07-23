@@ -589,8 +589,20 @@ export default function Home() {
             />
             <p className="text-[#8F6E56] text-[9px] tracking-[0.25em] uppercase font-sans font-semibold">16 de Outubro de 2026</p>
           </div>
-          <div className="text-espresso/60 text-[9px] uppercase tracking-widest font-semibold">
-            © 2026 Isadora & Wander. Todos os direitos reservados.
+          <div className="text-espresso/70 text-[10px] uppercase tracking-widest font-medium flex flex-col md:flex-row items-center gap-2 md:gap-4">
+            <span>© 2026 Isadora & Wander. Todos os direitos reservados.</span>
+            <span className="hidden md:inline text-border">•</span>
+            <span>
+              Desenvolvido por{" "}
+              <a
+                href="https://www.instagram.com/clean.designn/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:text-[#7A5C46] font-bold tracking-wider underline underline-offset-4 decoration-primary/40 hover:decoration-primary transition-editorial px-1 py-0.5 rounded bg-primary/5 hover:bg-primary/10"
+              >
+                Agência Clean
+              </a>
+            </span>
           </div>
         </div>
       </footer>
