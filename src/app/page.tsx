@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "motion/react";
 import Countdown from "@/components/countdown";
 import GiftRegistry from "@/components/gift-registry";
@@ -33,16 +34,16 @@ export default function Home() {
   const [currentHeroImage, setCurrentHeroImage] = useState(0);
 
   const localPhotos = [
-    "/img/ensaio/0bf01d89-e2f1-4d3f-8013-c1c0e72c106e.jpg",
-    "/img/ensaio/1b7525d0-0ab8-46ec-9ae9-5ddc0c5658dd.jpg",
-    "/img/ensaio/4b6d6f91-80fd-4c05-b145-b5ab6679271b.jpg",
-    "/img/ensaio/686a0a89-d214-47a4-9606-279ab673f558.jpg",
-    "/img/ensaio/7575732f-e406-41f1-b3d2-317517ce6c2b.jpg",
-    "/img/ensaio/8f45eda8-755c-4805-b680-aff5cc7efdfa.jpg",
-    "/img/ensaio/c86482ec-c16f-41aa-935a-aa3dab6f5ae6.jpg",
+    "/img/ensaio/0bf01d89-e2f1-4d3f-8013-c1c0e72c106e.webp",
+    "/img/ensaio/1b7525d0-0ab8-46ec-9ae9-5ddc0c5658dd.webp",
+    "/img/ensaio/4b6d6f91-80fd-4c05-b145-b5ab6679271b.webp",
+    "/img/ensaio/686a0a89-d214-47a4-9606-279ab673f558.webp",
+    "/img/ensaio/7575732f-e406-41f1-b3d2-317517ce6c2b.webp",
+    "/img/ensaio/8f45eda8-755c-4805-b680-aff5cc7efdfa.webp",
+    "/img/ensaio/c86482ec-c16f-41aa-935a-aa3dab6f5ae6.webp",
   ];
 
-  const [storyImage, setStoryImage] = useState("/img/ensaio/022878dc-0675-43e1-b3a2-11641fcff23e.jpg");
+  const [storyImage, setStoryImage] = useState("/img/ensaio/022878dc-0675-43e1-b3a2-11641fcff23e.webp");
   const [heroImages, setHeroImages] = useState<string[]>(localPhotos);
 
   useEffect(() => {
@@ -76,7 +77,7 @@ export default function Home() {
           {/* Logo Monogram */}
           <div className="flex flex-col items-center select-none py-1">
             <img
-              src="/img/logo2.png"
+              src="/img/logo2.webp"
               alt="Isadora & Wander Monograma"
               className="h-8 md:h-10 w-auto object-contain"
             />
@@ -172,9 +173,17 @@ export default function Home() {
               animate={{ opacity: 0.88, scale: 1.05 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 2.0, ease: "easeInOut" }}
-              className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: `url('${heroImages[currentHeroImage]}')` }}
-            />
+              className="absolute inset-0"
+            >
+              <Image
+                src={heroImages[currentHeroImage]}
+                alt="Ensaio de Casamento"
+                fill
+                priority
+                sizes="100vw"
+                className="object-cover object-center"
+              />
+            </motion.div>
           </AnimatePresence>
           {/* Scrim horizontal wash overlay for left-aligned text readability */}
           <div className="absolute inset-0 bg-gradient-to-r from-[#FAF6F3]/95 via-[#FAF6F3]/60 to-transparent z-10" />
@@ -261,14 +270,20 @@ export default function Home() {
           {/* Card 2: Photo Area (1/3 width) - Single Bezel Card */}
           <div className="md:col-span-1 bg-[#FAF6F3] border border-border p-4 flex flex-col justify-between space-y-4 transition-editorial hover:shadow-md group">
             <div className="relative w-full flex-1 min-h-[300px] overflow-hidden bg-[#F5EFEB] border border-border/10">
-              <motion.img
+              <motion.div
+                className="w-full h-full relative"
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
-                src={storyImage}
-                alt="Nosso Ensaio"
-                onError={() => setStoryImage("/img/nossocasamento.png")}
-                className="w-full h-full object-cover cursor-zoom-in"
-              />
+              >
+                <Image
+                  src={storyImage}
+                  alt="Nosso Ensaio"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  onError={() => setStoryImage("/img/nossocasamento.webp")}
+                  className="object-cover cursor-zoom-in"
+                />
+              </motion.div>
             </div>
             <div className="px-1 text-center">
               <span className="text-[8px] uppercase tracking-widest text-accent font-semibold">16.10.2026</span>
@@ -583,7 +598,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
           <div className="space-y-3">
             <img
-              src="/img/logo1.png"
+              src="/img/logo1.webp"
               alt="Isadora & Wander Logo"
               className="h-10 md:h-12 w-auto object-contain mx-auto md:mx-0 opacity-90 hover:opacity-100 transition-editorial"
             />

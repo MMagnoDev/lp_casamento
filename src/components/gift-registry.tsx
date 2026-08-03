@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "motion/react";
 import { Gift, Copy, Check, X, CaretLeft, CaretRight, WhatsappLogo } from "@phosphor-icons/react";
 
@@ -21,7 +22,7 @@ const INITIAL_GIFTS: GiftItem[] = [
     id: 1,
     name: "Drink para lua de mel",
     price: 120,
-    imageUrl: "/img/gifts/drink.png",
+    imageUrl: "/img/gifts/drink.webp",
     category: "Lua de Mel",
     reserved: false,
   },
@@ -29,7 +30,7 @@ const INITIAL_GIFTS: GiftItem[] = [
     id: 2,
     name: "Kit de toalhas macias",
     price: 160,
-    imageUrl: "/img/gifts/toalhas.png",
+    imageUrl: "/img/gifts/toalhas.webp",
     category: "Cama e Banho",
     reserved: false,
   },
@@ -37,7 +38,7 @@ const INITIAL_GIFTS: GiftItem[] = [
     id: 3,
     name: "Kit excesso de bagagem",
     price: 180,
-    imageUrl: "/img/gifts/bagagem.png",
+    imageUrl: "/img/gifts/bagagem.webp",
     category: "Viagem",
     reserved: false,
   },
@@ -45,7 +46,7 @@ const INITIAL_GIFTS: GiftItem[] = [
     id: 4,
     name: "Jogo de lençóis 100% algodão",
     price: 220,
-    imageUrl: "/img/gifts/lencois.png",
+    imageUrl: "/img/gifts/lencois.webp",
     category: "Cama e Banho",
     reserved: false,
   },
@@ -53,7 +54,7 @@ const INITIAL_GIFTS: GiftItem[] = [
     id: 5,
     name: "Jantar especial dos noivos",
     price: 280,
-    imageUrl: "/img/gifts/jantar.png",
+    imageUrl: "/img/gifts/jantar.webp",
     category: "Lua de Mel",
     reserved: false,
   },
@@ -61,7 +62,7 @@ const INITIAL_GIFTS: GiftItem[] = [
     id: 6,
     name: "Bebedouro elétrico refrigerado",
     price: 380,
-    imageUrl: "/img/gifts/bebedouro.png",
+    imageUrl: "/img/gifts/bebedouro.webp",
     category: "Eletros",
     reserved: false,
   },
@@ -69,7 +70,7 @@ const INITIAL_GIFTS: GiftItem[] = [
     id: 7,
     name: "Air Fryer digital",
     price: 450,
-    imageUrl: "/img/gifts/airfryer.png",
+    imageUrl: "/img/gifts/airfryer.webp",
     category: "Eletros",
     reserved: false,
   },
@@ -77,7 +78,7 @@ const INITIAL_GIFTS: GiftItem[] = [
     id: 8,
     name: "Passeio inesquecível de barco",
     price: 520,
-    imageUrl: "/img/gifts/passeio.png",
+    imageUrl: "/img/gifts/passeio.webp",
     category: "Lua de Mel",
     reserved: false,
   },
@@ -85,7 +86,7 @@ const INITIAL_GIFTS: GiftItem[] = [
     id: 9,
     name: "Forno elétrico de bancada",
     price: 580,
-    imageUrl: "/img/gifts/forno.png",
+    imageUrl: "/img/gifts/forno.webp",
     category: "Eletros",
     reserved: false,
   },
@@ -93,7 +94,7 @@ const INITIAL_GIFTS: GiftItem[] = [
     id: 10,
     name: "Mala de viagem grande premium",
     price: 650,
-    imageUrl: "/img/gifts/mala.png",
+    imageUrl: "/img/gifts/mala.webp",
     category: "Viagem",
     reserved: false,
   },
@@ -101,7 +102,7 @@ const INITIAL_GIFTS: GiftItem[] = [
     id: 11,
     name: "Cota de hospedagem dos noivos",
     price: 780,
-    imageUrl: "/img/gifts/hospedagem.png",
+    imageUrl: "/img/gifts/hospedagem.webp",
     category: "Lua de Mel",
     reserved: false,
   },
@@ -109,7 +110,127 @@ const INITIAL_GIFTS: GiftItem[] = [
     id: 12,
     name: "Fogão com forno de alta performance",
     price: 890,
-    imageUrl: "/img/gifts/fogao.png",
+    imageUrl: "/img/gifts/fogao.webp",
+    category: "Eletros",
+    reserved: false,
+  },
+  {
+    id: 13,
+    name: "Jogo de Pratos de Cerâmica (12 pçs)",
+    price: 150,
+    imageUrl: "/img/gifts/pratos.webp",
+    category: "Cozinha",
+    reserved: false,
+  },
+  {
+    id: 14,
+    name: "Aparelho de Fondue Premium",
+    price: 190,
+    imageUrl: "/img/gifts/fondue.webp",
+    category: "Cozinha",
+    reserved: false,
+  },
+  {
+    id: 15,
+    name: "Kit de Taças de Cristal",
+    price: 240,
+    imageUrl: "/img/gifts/tacas.webp",
+    category: "Cozinha",
+    reserved: false,
+  },
+  {
+    id: 16,
+    name: "Liquidificador de Alta Potência",
+    price: 280,
+    imageUrl: "/img/gifts/liquidificador.webp",
+    category: "Eletros",
+    reserved: false,
+  },
+  {
+    id: 17,
+    name: "Cafeteira Espresso Italiana",
+    price: 320,
+    imageUrl: "/img/gifts/cafeteira.webp",
+    category: "Eletros",
+    reserved: false,
+  },
+  {
+    id: 18,
+    name: "Jogo de Panelas Antiaderentes",
+    price: 490,
+    imageUrl: "/img/gifts/panelas.webp",
+    category: "Cozinha",
+    reserved: false,
+  },
+  {
+    id: 19,
+    name: "Aspirador de Pó Vertical Sem Fio",
+    price: 620,
+    imageUrl: "/img/gifts/aspirador.webp",
+    category: "Eletros",
+    reserved: false,
+  },
+  {
+    id: 20,
+    name: "Mala de Bordo Premium",
+    price: 350,
+    imageUrl: "/img/gifts/mala_bordo.webp",
+    category: "Viagem",
+    reserved: false,
+  },
+  {
+    id: 21,
+    name: "Almoço romântico na viagem",
+    price: 200,
+    imageUrl: "/img/gifts/almoco.webp",
+    category: "Lua de Mel",
+    reserved: false,
+  },
+  {
+    id: 22,
+    name: "Malas organizadoras de viagem",
+    price: 150,
+    imageUrl: "/img/gifts/malas_org.webp",
+    category: "Viagem",
+    reserved: false,
+  },
+  {
+    id: 23,
+    name: "Tábua Gourmet para Frios e Queijos",
+    price: 180,
+    imageUrl: "/img/gifts/tabua.webp",
+    category: "Cozinha",
+    reserved: false,
+  },
+  {
+    id: 24,
+    name: "Jogo de Cama Algodão Egípcio",
+    price: 450,
+    imageUrl: "/img/gifts/cama_egipcia.webp",
+    category: "Cama e Banho",
+    reserved: false,
+  },
+  {
+    id: 25,
+    name: "Mini Processador de Alimentos",
+    price: 210,
+    imageUrl: "/img/gifts/processador.webp",
+    category: "Eletros",
+    reserved: false,
+  },
+  {
+    id: 26,
+    name: "Passeio Histórico Guiado (Lua de Mel)",
+    price: 380,
+    imageUrl: "/img/gifts/hospedagem.webp",
+    category: "Lua de Mel",
+    reserved: false,
+  },
+  {
+    id: 27,
+    name: "Batedeira Planetária de Alta Performance",
+    price: 750,
+    imageUrl: "/img/gifts/forno.webp",
     category: "Eletros",
     reserved: false,
   },
@@ -129,14 +250,15 @@ function GiftCard({
       className={`shrink-0 bg-[#FAF6F3] border border-border p-4 flex flex-col justify-between space-y-4 transition-editorial hover:shadow-md group ${className}`}
     >
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#F5EFEB] border border-border/10 select-none">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src={gift.imageUrl}
           alt={gift.name}
+          fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           draggable={false}
-          className="w-full h-full object-cover transition-editorial group-hover:scale-105 select-none"
+          className="object-cover transition-editorial group-hover:scale-105 select-none"
         />
-        <div className="absolute top-3 left-3 bg-[#FAF6F3]/90 backdrop-blur-sm border border-white/20 px-3 py-1 rounded-full shadow-sm">
+        <div className="absolute top-3 left-3 bg-[#FAF6F3]/90 backdrop-blur-sm border border-white/20 px-3 py-1 rounded-full shadow-sm z-10">
           <span className="text-[8px] uppercase tracking-widest text-[#8F6E56] font-semibold block">
             {gift.category}
           </span>
@@ -173,170 +295,155 @@ export default function GiftRegistry() {
   const [selectedGift, setSelectedGift] = useState<GiftItem | null>(null);
   const [copied, setCopied] = useState(false);
   const [showPixDetails, setShowPixDetails] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
-  
-  // Unified ref & interaction state
+
+  // All interaction state as refs to avoid re-renders affecting RAF loop
   const containerRef = useRef<HTMLDivElement>(null);
-  const [isInteracting, setIsInteracting] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragged, setDragged] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeftState, setScrollLeftState] = useState(0);
-  const interactionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const group1Ref = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number | null>(null);
+  const posRef = useRef(0); // float accumulator
+  const isDraggingRef = useRef(false);
+  const isInteractingRef = useRef(false);
+  const dragStartXRef = useRef(0);
+  const dragScrollRef = useRef(0);
+  const draggedRef = useRef(false);
+  const resumeTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const groupWidthRef = useRef(0);
 
-  // Floating point scroll accumulator to prevent browser integer truncation
-  const scrollAccumulatorRef = useRef(0);
+  const SPEED = 40; // px/s
 
-  // continuous scroll loop (pauses on touch/drag/modal open)
+  // Measure group width after DOM is ready
   useEffect(() => {
-    const container = containerRef.current;
-    if (!container || selectedGift) return;
-
-    // Initialize accumulator to the current scroll value on start
-    scrollAccumulatorRef.current = container.scrollLeft;
-
-    let animationFrameId: number;
-    let lastTime = performance.now();
-    const speed = 35; // Pixels per second
-
-    const scrollLoop = (time: number) => {
-      if (!isInteracting) {
-        const delta = (time - lastTime) / 1000;
-        const scrollAmount = speed * delta;
-        
-        // Accumulate float
-        scrollAccumulatorRef.current += scrollAmount;
-
-        const firstGroup = container.firstElementChild as HTMLElement;
-        if (firstGroup) {
-          const firstGroupWidth = firstGroup.clientWidth + 24; // width + gap
-          if (scrollAccumulatorRef.current >= firstGroupWidth) {
-            scrollAccumulatorRef.current -= firstGroupWidth;
-          }
-        }
-
-        // Set rounded integer to native element to bypass subpixel truncation
-        container.scrollLeft = Math.round(scrollAccumulatorRef.current);
-      } else {
-        // Sync accumulator with user interaction
-        scrollAccumulatorRef.current = container.scrollLeft;
-      }
-      lastTime = time;
-      animationFrameId = requestAnimationFrame(scrollLoop);
-    };
-
-    animationFrameId = requestAnimationFrame(scrollLoop);
-
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-      if (interactionTimeoutRef.current) {
-        clearTimeout(interactionTimeoutRef.current);
+    const measure = () => {
+      const g = group1Ref.current;
+      if (g) {
+        groupWidthRef.current = g.offsetWidth + 24; // width + gap
       }
     };
-  }, [isInteracting, selectedGift, gifts.length]);
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [gifts.length]);
 
-  // Global window listener to release drag state anywhere on mouseup
+  // Continuous RAF auto-scroll — pauses when modal open or user interacting
   useEffect(() => {
-    if (!isDragging) return;
+    if (selectedGift) {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      return;
+    }
 
-    const handleGlobalMouseUp = () => {
-      setIsDragging(false);
-      endInteraction();
-    };
-
-    window.addEventListener("mouseup", handleGlobalMouseUp);
-    return () => {
-      window.removeEventListener("mouseup", handleGlobalMouseUp);
-    };
-  }, [isDragging]);
-
-  // Handles manual scroll wrapping in both directions
-  const handleScroll = () => {
     const container = containerRef.current;
     if (!container) return;
 
-    const firstGroup = container.firstElementChild as HTMLElement;
-    if (!firstGroup) return;
+    // Sync accumulator with current scroll
+    posRef.current = container.scrollLeft;
 
-    const firstGroupWidth = firstGroup.clientWidth + 24;
+    let lastTime = performance.now();
 
-    if (container.scrollLeft >= firstGroupWidth * 2 - container.clientWidth) {
-      container.scrollLeft -= firstGroupWidth;
-      scrollAccumulatorRef.current = container.scrollLeft;
-    } else if (container.scrollLeft <= 0) {
-      container.scrollLeft += firstGroupWidth;
-      scrollAccumulatorRef.current = container.scrollLeft;
-    } else if (isInteracting) {
-      // Sync accumulator while user is scrolling/dragging
-      scrollAccumulatorRef.current = container.scrollLeft;
-    }
-  };
+    const loop = (now: number) => {
+      const delta = (now - lastTime) / 1000;
+      lastTime = now;
+
+      if (!isInteractingRef.current) {
+        const gw = groupWidthRef.current;
+        if (gw > 0) {
+          posRef.current += SPEED * delta;
+          // Seamless wrap: when we've scrolled one full group, jump back
+          if (posRef.current >= gw) {
+            posRef.current -= gw;
+          }
+          container.scrollLeft = Math.round(posRef.current);
+        }
+      } else {
+        // Keep accumulator in sync while user drags
+        posRef.current = container.scrollLeft;
+      }
+
+      rafRef.current = requestAnimationFrame(loop);
+    };
+
+    rafRef.current = requestAnimationFrame(loop);
+
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, [selectedGift, gifts.length]);
+
+  // Release drag on global mouseup
+  useEffect(() => {
+    const onUp = () => {
+      if (isDraggingRef.current) {
+        isDraggingRef.current = false;
+        endInteraction();
+      }
+    };
+    window.addEventListener("mouseup", onUp);
+    return () => window.removeEventListener("mouseup", onUp);
+  }, []);
 
   const startInteraction = () => {
-    setIsInteracting(true);
-    if (interactionTimeoutRef.current) {
-      clearTimeout(interactionTimeoutRef.current);
-    }
-    if (containerRef.current) {
-      scrollAccumulatorRef.current = containerRef.current.scrollLeft;
-    }
+    isInteractingRef.current = true;
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    posRef.current = containerRef.current?.scrollLeft ?? posRef.current;
   };
 
   const endInteraction = () => {
-    if (interactionTimeoutRef.current) {
-      clearTimeout(interactionTimeoutRef.current);
-    }
-    interactionTimeoutRef.current = setTimeout(() => {
-      setIsInteracting(false);
-      if (containerRef.current) {
-        scrollAccumulatorRef.current = containerRef.current.scrollLeft;
-      }
-    }, 300); // Resumes auto-scroll 300ms after user interaction ends
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    resumeTimerRef.current = setTimeout(() => {
+      isInteractingRef.current = false;
+      posRef.current = containerRef.current?.scrollLeft ?? posRef.current;
+    }, 300);
   };
 
-  // Desktop Mouse Drag Scroll Handlers
   const handleMouseDown = (e: React.MouseEvent) => {
     const container = containerRef.current;
     if (!container) return;
-
-    setIsDragging(true);
-    setDragged(false); // Reset drag state on click
+    isDraggingRef.current = true;
+    draggedRef.current = false;
     startInteraction();
-    setStartX(e.pageX - container.offsetLeft);
-    setScrollLeftState(container.scrollLeft);
-    scrollAccumulatorRef.current = container.scrollLeft;
+    dragStartXRef.current = e.pageX - container.offsetLeft;
+    dragScrollRef.current = container.scrollLeft;
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging) return;
+    if (!isDraggingRef.current) return;
     e.preventDefault();
-
     const container = containerRef.current;
     if (!container) return;
-
     const x = e.pageX - container.offsetLeft;
-    const walk = (x - startX) * 1.5; // multiplier for drag sensitivity
-
-    if (Math.abs(walk) > 5) {
-      setDragged(true); // Drag occurred
-    }
-
-    container.scrollLeft = scrollLeftState - walk;
-    scrollAccumulatorRef.current = container.scrollLeft;
+    const walk = (x - dragStartXRef.current) * 1.5;
+    if (Math.abs(walk) > 5) draggedRef.current = true;
+    container.scrollLeft = dragScrollRef.current - walk;
+    posRef.current = container.scrollLeft;
   };
 
   const handleMouseUpOrLeave = () => {
-    if (isDragging) {
-      setIsDragging(false);
+    if (isDraggingRef.current) {
+      isDraggingRef.current = false;
       endInteraction();
     }
   };
 
-  // Prevent clicking on cards when dragging
   const handleClickCapture = (e: React.MouseEvent) => {
-    if (dragged) {
+    if (draggedRef.current) {
       e.preventDefault();
       e.stopPropagation();
+    }
+  };
+
+  // Manual scroll wrapping for touch/trackpad drag past boundary
+  const handleScroll = () => {
+    const container = containerRef.current;
+    if (!container) return;
+    const gw = groupWidthRef.current;
+    if (gw <= 0) return;
+    if (container.scrollLeft >= gw) {
+      container.scrollLeft -= gw;
+      posRef.current = container.scrollLeft;
+    } else if (container.scrollLeft < 0) {
+      container.scrollLeft += gw;
+      posRef.current = container.scrollLeft;
+    } else if (isInteractingRef.current) {
+      posRef.current = container.scrollLeft;
     }
   };
 
@@ -354,14 +461,10 @@ export default function GiftRegistry() {
   };
 
   return (
-    <div 
-      className="space-y-8 w-full overflow-hidden"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      {/* Unified Infinite Scroll Carousel (Mobile & Desktop) */}
+    <div className="space-y-8 w-full overflow-hidden">
+      {/* Infinite Scroll Carousel */}
       <div className="relative w-full overflow-hidden py-2 select-none">
-        <div 
+        <div
           ref={containerRef}
           onScroll={handleScroll}
           onTouchStart={startInteraction}
@@ -371,27 +474,27 @@ export default function GiftRegistry() {
           onMouseUp={handleMouseUpOrLeave}
           onMouseLeave={handleMouseUpOrLeave}
           onClickCapture={handleClickCapture}
-          className="flex gap-6 overflow-x-auto scrollbar-none snap-none cursor-grab active:cursor-grabbing"
+          className="flex gap-6 overflow-x-auto scrollbar-none cursor-grab active:cursor-grabbing"
           style={{ WebkitOverflowScrolling: "touch" }}
         >
-          {/* Group 1 */}
-          <div className="flex gap-6 shrink-0">
+          {/* Group 1 — real items */}
+          <div ref={group1Ref} className="flex gap-6 shrink-0">
             {gifts.map((gift) => (
-              <GiftCard 
-                key={`g1-${gift.id}`} 
-                gift={gift} 
-                onSelect={setSelectedGift} 
+              <GiftCard
+                key={`g1-${gift.id}`}
+                gift={gift}
+                onSelect={setSelectedGift}
                 className="w-[260px] md:w-[320px]"
               />
             ))}
           </div>
-          {/* Group 2 */}
+          {/* Group 2 — seamless clone */}
           <div className="flex gap-6 shrink-0" aria-hidden="true">
             {gifts.map((gift) => (
-              <GiftCard 
-                key={`g2-${gift.id}`} 
-                gift={gift} 
-                onSelect={setSelectedGift} 
+              <GiftCard
+                key={`g2-${gift.id}`}
+                gift={gift}
+                onSelect={setSelectedGift}
                 className="w-[260px] md:w-[320px]"
               />
             ))}
@@ -402,7 +505,7 @@ export default function GiftRegistry() {
       <div className="flex justify-center items-center max-w-lg mx-auto gap-4">
         <div className="text-center pl-4 w-full">
           <p className="text-[#8F6E56] text-[9px] uppercase tracking-wider font-semibold italic">
-            “Os presentes são simbólicos e os valores revertidos ao casal.”
+            "Os presentes são simbólicos e os valores revertidos ao casal."
           </p>
         </div>
       </div>
