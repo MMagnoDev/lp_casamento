@@ -2,239 +2,12 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
-import { Gift, Copy, Check, X, CaretLeft, CaretRight, WhatsappLogo } from "@phosphor-icons/react";
+import { Gift, Copy, Check, X, ArrowRight, WhatsappLogo } from "@phosphor-icons/react";
+import { GIFTS_DATABASE, GiftItem } from "@/data/gifts";
 
-const WHATSAPP_PHONE = "553799113057"; // Substitua pelo número de telefone do casal (com DDI + DDD, apenas números)
-
-
-interface GiftItem {
-  id: number;
-  name: string;
-  price: number;
-  imageUrl: string;
-  category: string;
-  reserved: boolean;
-}
-
-const INITIAL_GIFTS: GiftItem[] = [
-  {
-    id: 1,
-    name: "Drink para lua de mel",
-    price: 120,
-    imageUrl: "/img/gifts/drink.webp",
-    category: "Lua de Mel",
-    reserved: false,
-  },
-  {
-    id: 2,
-    name: "Kit de toalhas macias",
-    price: 160,
-    imageUrl: "/img/gifts/toalhas.webp",
-    category: "Cama e Banho",
-    reserved: false,
-  },
-  {
-    id: 3,
-    name: "Kit excesso de bagagem",
-    price: 180,
-    imageUrl: "/img/gifts/bagagem.webp",
-    category: "Viagem",
-    reserved: false,
-  },
-  {
-    id: 4,
-    name: "Jogo de lençóis 100% algodão",
-    price: 220,
-    imageUrl: "/img/gifts/lencois.webp",
-    category: "Cama e Banho",
-    reserved: false,
-  },
-  {
-    id: 5,
-    name: "Jantar especial dos noivos",
-    price: 280,
-    imageUrl: "/img/gifts/jantar.webp",
-    category: "Lua de Mel",
-    reserved: false,
-  },
-  {
-    id: 6,
-    name: "Bebedouro elétrico refrigerado",
-    price: 380,
-    imageUrl: "/img/gifts/bebedouro.webp",
-    category: "Eletros",
-    reserved: false,
-  },
-  {
-    id: 7,
-    name: "Air Fryer digital",
-    price: 450,
-    imageUrl: "/img/gifts/airfryer.webp",
-    category: "Eletros",
-    reserved: false,
-  },
-  {
-    id: 8,
-    name: "Passeio inesquecível de barco",
-    price: 520,
-    imageUrl: "/img/gifts/passeio.webp",
-    category: "Lua de Mel",
-    reserved: false,
-  },
-  {
-    id: 9,
-    name: "Forno elétrico de bancada",
-    price: 580,
-    imageUrl: "/img/gifts/forno.webp",
-    category: "Eletros",
-    reserved: false,
-  },
-  {
-    id: 10,
-    name: "Mala de viagem grande premium",
-    price: 650,
-    imageUrl: "/img/gifts/mala.webp",
-    category: "Viagem",
-    reserved: false,
-  },
-  {
-    id: 11,
-    name: "Cota de hospedagem dos noivos",
-    price: 780,
-    imageUrl: "/img/gifts/hospedagem.webp",
-    category: "Lua de Mel",
-    reserved: false,
-  },
-  {
-    id: 12,
-    name: "Fogão com forno de alta performance",
-    price: 890,
-    imageUrl: "/img/gifts/fogao.webp",
-    category: "Eletros",
-    reserved: false,
-  },
-  {
-    id: 13,
-    name: "Jogo de Pratos de Cerâmica (12 pçs)",
-    price: 150,
-    imageUrl: "/img/gifts/pratos.webp",
-    category: "Cozinha",
-    reserved: false,
-  },
-  {
-    id: 14,
-    name: "Aparelho de Fondue Premium",
-    price: 190,
-    imageUrl: "/img/gifts/fondue.webp",
-    category: "Cozinha",
-    reserved: false,
-  },
-  {
-    id: 15,
-    name: "Kit de Taças de Cristal",
-    price: 240,
-    imageUrl: "/img/gifts/tacas.webp",
-    category: "Cozinha",
-    reserved: false,
-  },
-  {
-    id: 16,
-    name: "Liquidificador de Alta Potência",
-    price: 280,
-    imageUrl: "/img/gifts/liquidificador.webp",
-    category: "Eletros",
-    reserved: false,
-  },
-  {
-    id: 17,
-    name: "Cafeteira Espresso Italiana",
-    price: 320,
-    imageUrl: "/img/gifts/cafeteira.webp",
-    category: "Eletros",
-    reserved: false,
-  },
-  {
-    id: 18,
-    name: "Jogo de Panelas Antiaderentes",
-    price: 490,
-    imageUrl: "/img/gifts/panelas.webp",
-    category: "Cozinha",
-    reserved: false,
-  },
-  {
-    id: 19,
-    name: "Aspirador de Pó Vertical Sem Fio",
-    price: 620,
-    imageUrl: "/img/gifts/aspirador.webp",
-    category: "Eletros",
-    reserved: false,
-  },
-  {
-    id: 20,
-    name: "Mala de Bordo Premium",
-    price: 350,
-    imageUrl: "/img/gifts/mala_bordo.webp",
-    category: "Viagem",
-    reserved: false,
-  },
-  {
-    id: 21,
-    name: "Almoço romântico na viagem",
-    price: 200,
-    imageUrl: "/img/gifts/almoco.webp",
-    category: "Lua de Mel",
-    reserved: false,
-  },
-  {
-    id: 22,
-    name: "Malas organizadoras de viagem",
-    price: 150,
-    imageUrl: "/img/gifts/malas_org.webp",
-    category: "Viagem",
-    reserved: false,
-  },
-  {
-    id: 23,
-    name: "Tábua Gourmet para Frios e Queijos",
-    price: 180,
-    imageUrl: "/img/gifts/tabua.webp",
-    category: "Cozinha",
-    reserved: false,
-  },
-  {
-    id: 24,
-    name: "Jogo de Cama Algodão Egípcio",
-    price: 450,
-    imageUrl: "/img/gifts/cama_egipcia.webp",
-    category: "Cama e Banho",
-    reserved: false,
-  },
-  {
-    id: 25,
-    name: "Mini Processador de Alimentos",
-    price: 210,
-    imageUrl: "/img/gifts/processador.webp",
-    category: "Eletros",
-    reserved: false,
-  },
-  {
-    id: 26,
-    name: "Passeio Histórico Guiado (Lua de Mel)",
-    price: 380,
-    imageUrl: "/img/gifts/hospedagem.webp",
-    category: "Lua de Mel",
-    reserved: false,
-  },
-  {
-    id: 27,
-    name: "Batedeira Planetária de Alta Performance",
-    price: 750,
-    imageUrl: "/img/gifts/forno.webp",
-    category: "Eletros",
-    reserved: false,
-  },
-];
+const WHATSAPP_PHONE = "553799113057";
 
 function GiftCard({ 
   gift, 
@@ -291,16 +64,16 @@ function GiftCard({
 }
 
 export default function GiftRegistry() {
-  const [gifts, setGifts] = useState<GiftItem[]>(INITIAL_GIFTS);
+  const [gifts, setGifts] = useState<GiftItem[]>(GIFTS_DATABASE);
   const [selectedGift, setSelectedGift] = useState<GiftItem | null>(null);
   const [copied, setCopied] = useState(false);
   const [showPixDetails, setShowPixDetails] = useState(false);
 
-  // All interaction state as refs to avoid re-renders affecting RAF loop
+  // Interaction refs for continuous scroll
   const containerRef = useRef<HTMLDivElement>(null);
   const group1Ref = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number | null>(null);
-  const posRef = useRef(0); // float accumulator
+  const posRef = useRef(0);
   const isDraggingRef = useRef(false);
   const isInteractingRef = useRef(false);
   const dragStartXRef = useRef(0);
@@ -311,12 +84,11 @@ export default function GiftRegistry() {
 
   const SPEED = 40; // px/s
 
-  // Measure group width after DOM is ready
   useEffect(() => {
     const measure = () => {
       const g = group1Ref.current;
       if (g) {
-        groupWidthRef.current = g.offsetWidth + 24; // width + gap
+        groupWidthRef.current = g.offsetWidth + 24;
       }
     };
     measure();
@@ -324,7 +96,6 @@ export default function GiftRegistry() {
     return () => window.removeEventListener("resize", measure);
   }, [gifts.length]);
 
-  // Continuous RAF auto-scroll — pauses when modal open or user interacting
   useEffect(() => {
     if (selectedGift) {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
@@ -334,9 +105,7 @@ export default function GiftRegistry() {
     const container = containerRef.current;
     if (!container) return;
 
-    // Sync accumulator with current scroll
     posRef.current = container.scrollLeft;
-
     let lastTime = performance.now();
 
     const loop = (now: number) => {
@@ -347,14 +116,12 @@ export default function GiftRegistry() {
         const gw = groupWidthRef.current;
         if (gw > 0) {
           posRef.current += SPEED * delta;
-          // Seamless wrap: when we've scrolled one full group, jump back
           if (posRef.current >= gw) {
             posRef.current -= gw;
           }
           container.scrollLeft = Math.round(posRef.current);
         }
       } else {
-        // Keep accumulator in sync while user drags
         posRef.current = container.scrollLeft;
       }
 
@@ -368,7 +135,6 @@ export default function GiftRegistry() {
     };
   }, [selectedGift, gifts.length]);
 
-  // Release drag on global mouseup
   useEffect(() => {
     const onUp = () => {
       if (isDraggingRef.current) {
@@ -430,7 +196,6 @@ export default function GiftRegistry() {
     }
   };
 
-  // Manual scroll wrapping for touch/trackpad drag past boundary
   const handleScroll = () => {
     const container = containerRef.current;
     if (!container) return;
@@ -479,7 +244,7 @@ export default function GiftRegistry() {
         >
           {/* Group 1 — real items */}
           <div ref={group1Ref} className="flex gap-6 shrink-0">
-            {gifts.map((gift) => (
+            {gifts.slice(0, 30).map((gift) => (
               <GiftCard
                 key={`g1-${gift.id}`}
                 gift={gift}
@@ -490,7 +255,7 @@ export default function GiftRegistry() {
           </div>
           {/* Group 2 — seamless clone */}
           <div className="flex gap-6 shrink-0" aria-hidden="true">
-            {gifts.map((gift) => (
+            {gifts.slice(0, 30).map((gift) => (
               <GiftCard
                 key={`g2-${gift.id}`}
                 gift={gift}
@@ -502,12 +267,20 @@ export default function GiftRegistry() {
         </div>
       </div>
 
-      <div className="flex justify-center items-center max-w-lg mx-auto gap-4">
-        <div className="text-center pl-4 w-full">
-          <p className="text-[#8F6E56] text-[9px] uppercase tracking-wider font-semibold italic">
-            "Os presentes são simbólicos e os valores revertidos ao casal."
-          </p>
-        </div>
+      {/* Action CTA & Subtitle */}
+      <div className="flex flex-col sm:flex-row justify-between items-center max-w-2xl mx-auto gap-4 pt-2">
+        <p className="text-[#8F6E56] text-[9px] uppercase tracking-wider font-semibold italic text-center sm:text-left">
+          "Os presentes são simbólicos e os valores revertidos ao casal."
+        </p>
+
+        <Link
+          href="/presentes"
+          className="inline-flex items-center gap-2 bg-[#8F6E56] hover:bg-[#7A5C46] text-[#FAF6F3] px-6 py-3 rounded-full text-[10px] font-semibold uppercase tracking-wider transition-editorial shadow-sm hover:shadow-md active:scale-95 shrink-0"
+        >
+          <Gift size={14} />
+          <span>Ver todos os presentes (90 opções)</span>
+          <ArrowRight size={12} />
+        </Link>
       </div>
 
       {/* Gift Modal */}

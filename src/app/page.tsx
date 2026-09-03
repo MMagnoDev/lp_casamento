@@ -330,6 +330,16 @@ export default function Home() {
               <p className="text-espresso/80 text-xs leading-relaxed font-sans font-light max-w-[35ch] mx-auto lg:mr-auto lg:ml-0 text-center lg:text-left">
                 Caso queira nos presentear de forma simbólica, escolha uma das cotas ou presentes especiais abaixo. Os valores correspondentes serão transferidos diretamente para nós.
               </p>
+
+              <div className="pt-2 flex justify-center lg:justify-start w-full">
+                <a
+                  href="/presentes"
+                  className="inline-flex items-center gap-2 bg-[#8F6E56] hover:bg-[#7A5C46] text-[#FAF6F3] px-6 py-3 rounded-full text-[10px] font-semibold uppercase tracking-wider transition-editorial shadow-sm hover:shadow-md active:scale-95 cursor-pointer"
+                >
+                  <span>Ver Todos os Presentes (90)</span>
+                  <span>→</span>
+                </a>
+              </div>
             </div>
 
             {/* Right side: 2/3 width for the items */}
